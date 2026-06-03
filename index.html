@@ -1,0 +1,2726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mars Monkey English Spaceship - Ares Cockpit</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for premium sci-fi holographic feel -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- Tone.js for real-time synthesizer audio feedback & Sirens -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #030106; /* Deep Space Charcoal */
+        }
+        .font-mono-sci {
+            font-family: 'Share Tech Mono', 'Orbitron', monospace;
+        }
+        .font-orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+        /* Dynamic Viewport Height for premium mobile experience */
+        #game-container {
+            height: 100vh;
+        }
+        @supports (height: 100dvh) {
+            #game-container {
+                height: 100dvh;
+                max-height: 100dvh;
+            }
+        }
+        /* Sleek glowing minimal neon styles */
+        .neon-border-orange {
+            box-shadow: 0 0 25px rgba(249, 115, 22, 0.25);
+            border: 2.5px solid rgba(249, 115, 22, 0.6);
+        }
+        .neon-border-red {
+            box-shadow: 0 0 35px rgba(239, 68, 68, 0.6);
+            border: 3px solid rgba(239, 68, 68, 0.9);
+        }
+        .neon-border-purple {
+            box-shadow: 0 0 25px rgba(168, 85, 247, 0.4);
+            border: 2.5px solid rgba(168, 85, 247, 0.7);
+        }
+        .neon-text-orange {
+            text-shadow: 0 0 10px rgba(249, 115, 22, 0.7);
+        }
+        .neon-text-purple {
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.8);
+        }
+        /* Solid Dark Glass Panel */
+        .glass-panel {
+            background: rgba(10, 6, 20, 0.95);
+            border: 1px solid rgba(249, 115, 22, 0.25);
+        }
+        /* Custom responsive scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(4, 2, 7, 0.9);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(249, 115, 22, 0.35);
+            border-radius: 9px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(249, 115, 22, 0.7);
+        }
+        /* Flashing warning overlay */
+        @keyframes emergency-flash {
+            0%, 100% { background-color: rgba(239, 68, 68, 0); }
+            50% { background-color: rgba(239, 68, 68, 0.22); }
+        }
+        .emergency-active {
+            animation: emergency-flash 0.5s infinite;
+        }
+        @keyframes slide-up {
+            from { transform: translateY(18px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .animate-slide-up {
+            animation: slide-up 0.35s ease-out both;
+        }
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .animate-fade-in {
+            animation: fade-in 0.25s ease-out both;
+        }
+    </style>
+</head>
+<body class="text-slate-100 min-h-screen flex flex-col justify-between selection:bg-orange-500 selection:text-black">
+
+    <!-- START INTRO SCREEN -->
+    <div id="intro-screen" class="fixed inset-0 bg-[#030105] z-50 flex flex-col justify-center items-center p-4 md:p-6 text-center transition-all duration-700">
+        <div class="max-w-3xl w-full max-h-[95vh] md:max-h-[90vh] overflow-y-auto p-6 md:p-10 rounded-3xl glass-panel neon-border-orange flex flex-col justify-between">
+            <div>
+                <div class="flex justify-center gap-4 text-4xl md:text-5xl mb-4 md:mb-6">
+                    <span>🐒</span>
+                    <span>🌋</span>
+                    <span>🐵</span>
+                    <span>👽</span>
+                </div>
+                <h1 class="text-3xl md:text-5xl lg:text-6xl font-orbitron font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-amber-400 to-purple-500 mb-4 tracking-wider uppercase leading-tight">
+                    MARS MONKEY SPACESHIP
+                </h1>
+                <p class="text-orange-400 font-mono-sci tracking-widest uppercase text-sm md:text-base mb-6 font-bold">
+                    🚀 Mars Primate Academy & Terminal (Grades 4-6)
+                </p>
+                
+                <div class="space-y-4 mb-6 md:mb-8 text-slate-300 text-left text-sm md:text-base lg:text-lg leading-relaxed border-l-4 border-orange-500 pl-4 md:pl-6 max-h-[35vh] overflow-y-auto font-sans">
+                    <p><strong>[Welcome, Junior Space Captain!]</strong></p>
+                    <p>Help our genius crew monkey couple—<strong>Soongyi (🐵)</strong> and his brilliant tech-genius girlfriend, <strong>Sooongsoongyi (🐒)</strong>—steer their spaceship safely across outer space and talk with the ancient giant Mars Robot!</p>
+                    <p>🚀 All computers in our cockpit are formatted in <strong>English</strong>! Correctly solve vocabulary and dialogue challenges to power up our life support systems.</p>
+                    <p class="text-red-400 font-bold">⚠️ EMERGENCY ALERT: Jito (지토), the legendary green alien, is flying nearby! Keep an eye on the Active Mars-Scanner. Click him immediately when spotted, or face cosmic abduction!</p>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <button id="start-btn" class="w-full md:w-auto px-10 py-5 bg-orange-950/50 hover:bg-orange-500 hover:text-slate-950 text-orange-400 font-orbitron font-bold rounded-2xl border-2 border-orange-500 transition-all duration-300 hover:shadow-[0_0_25px_rgba(249,115,22,0.6)] tracking-widest text-lg md:text-xl cursor-pointer">
+                    🐵 LAUNCH COCKPIT TERMINAL 🐒
+                </button>
+                <p class="text-slate-500 text-xs font-mono-sci">Warning: Real BGM streams immediately upon launch!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROLOGUE SCREEN -->
+    <div id="prologue-screen" class="fixed inset-0 bg-[#030105] z-40 flex flex-col justify-center items-center p-4 md:p-6 text-center transition-all duration-700 hidden">
+        <div class="max-w-3xl w-full max-h-[95vh] md:max-h-[90vh] overflow-y-auto p-6 md:p-10 rounded-3xl glass-panel neon-border-purple flex flex-col justify-between relative">
+            
+            <!-- Red Skip Button in Top-Right Corner -->
+            <button id="prologue-skip-btn" class="absolute top-4 right-4 px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-orbitron font-bold text-xs tracking-wider rounded-xl transition-all duration-300 cursor-pointer z-50 shadow-md shadow-red-500/30">
+                ⏭️ SKIP
+            </button>
+
+            <div class="flex-1 flex flex-col justify-center my-auto py-4">
+                <div class="text-xs font-mono-sci text-purple-400 uppercase tracking-widest mb-2 font-bold animate-pulse">[MISSION DATA LINK CONNECTING...]</div>
+                <h2 class="text-2xl md:text-4xl font-orbitron font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-pink-400 to-orange-400 mb-6 tracking-wide uppercase leading-tight">
+                    PROLOGUE: THE PRIMATE PIONEERS
+                </h2>
+                <div id="prologue-typing-box" class="space-y-4 text-slate-200 text-left text-sm md:text-base lg:text-lg leading-relaxed border-l-4 border-purple-500 pl-4 md:pl-6 min-h-[180px] max-h-[45vh] overflow-y-auto font-sans font-semibold">
+                    <!-- Typed prologue story line-by-line pops up dynamically here -->
+                </div>
+            </div>
+
+            <div class="mt-6 flex justify-center">
+                <button id="prologue-next-btn" class="hidden px-8 py-3 bg-purple-950/60 hover:bg-purple-500 hover:text-slate-950 text-purple-300 font-orbitron font-bold rounded-xl border border-purple-500 transition-all duration-300 cursor-pointer animate-bounce text-sm">
+                    ENTER COCKPIT TERMINAL ➔
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIDEO SCREEN -->
+    <div id="video-screen" class="fixed inset-0 bg-[#030105] z-30 flex flex-col justify-center items-center p-4 md:p-6 text-center transition-all duration-700 hidden">
+        <div class="max-w-4xl w-full max-h-[95vh] md:max-h-[90vh] overflow-y-auto p-6 md:p-8 rounded-3xl glass-panel neon-border-purple flex flex-col justify-between relative">
+            
+            <!-- Red Skip Button in Top-Right Corner of Video Container -->
+            <button id="video-skip-btn" class="absolute top-4 right-4 px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-orbitron font-bold text-xs tracking-wider rounded-xl transition-all duration-300 cursor-pointer z-50 shadow-md shadow-red-500/30">
+                ⏭️ SKIP VIDEO
+            </button>
+
+            <div class="flex-1 flex flex-col justify-center my-auto py-2">
+                <div class="text-xs font-mono-sci text-orange-400 uppercase tracking-widest mb-2 font-bold animate-pulse">[SATELLITE BRIEFING INCOMING]</div>
+                <h2 class="text-xl md:text-2xl font-orbitron font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-amber-400 to-purple-500 mb-4 tracking-wide uppercase leading-tight">
+                    🛰️ MISSION FLIGHT VIDEO
+                </h2>
+                
+                <!-- Video Container Element -->
+                <div class="w-full aspect-video bg-[#050308] rounded-2xl overflow-hidden border-2 border-purple-500/30 flex items-center justify-center relative shadow-2xl">
+                    <video id="briefing-video" class="w-full h-full object-contain" controls autoplay playsinline>
+                        <source src="https://drive.google.com/uc?id=1e8CpO4zx5sUag_hnYFofhGW4Z4N_dRkY&export=download" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <!-- Fallback Direct IFrame Preview if stream fails to play smoothly -->
+                    <iframe id="briefing-iframe" class="absolute inset-0 w-full h-full hidden" src="https://drive.google.com/file/d/1e8CpO4zx5sUag_hnYFofhGW4Z4N_dRkY/preview" allow="autoplay" frameborder="0"></iframe>
+                </div>
+            </div>
+            
+            <p class="text-[11px] text-slate-400 font-mono-sci mt-4">
+                The cockpit telemetry will automatically synchronize after video playback.
+            </p>
+        </div>
+    </div>
+
+    <!-- MAIN COCKPIT INTERFACE -->
+    <div id="game-container" class="hidden flex-1 flex flex-col overflow-hidden">
+        
+        <!-- HEADER PANEL -->
+        <header class="border-b-2 border-orange-500/30 bg-slate-950 px-6 py-4 flex flex-wrap justify-between items-center z-20">
+            <div class="flex items-center gap-4">
+                <div id="status-pulse-dot" class="w-3 h-3 bg-orange-500 rounded-full animate-ping"></div>
+                <div class="flex items-center gap-2">
+                    <span class="text-3xl">🌋</span>
+                    <div>
+                        <span class="text-xs text-orange-500 font-mono-sci tracking-widest block font-bold">MARS PRIMATE TELEMETRY LINK</span>
+                        <h2 class="font-orbitron font-bold text-lg text-slate-100 uppercase tracking-widest">ARES-99 COCKPIT TERMINAL</h2>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex flex-wrap items-center gap-3 mt-2 md:mt-0">
+                <!-- Translation Helper Toggle Button (Starts as OFF by Default, says KOREAN TRANSLATION) -->
+                <button id="translate-toggle" class="bg-slate-900 hover:bg-slate-800 text-slate-400 text-xs px-4 py-2 rounded-xl border border-slate-700 transition-all font-bold cursor-pointer flex items-center gap-1">
+                    🇰🇷 KOREAN TRANSLATION
+                </button>
+
+                <div class="flex items-center gap-2 bg-slate-900/80 px-4 py-2 rounded-xl border border-slate-800 text-xs font-mono-sci text-amber-500 font-bold">
+                    ⚠️ MISTAKES: <span id="wrong-count-hud" class="text-red-500 text-sm font-black">0</span> / 3
+                </div>
+
+                <button id="mute-btn" class="text-orange-400 hover:text-orange-300 text-xs px-4 py-2 bg-orange-950/40 hover:bg-orange-900/40 rounded-xl border border-orange-500/50 transition-all font-bold cursor-pointer">
+                    🔊 MUSIC: ON
+                </button>
+            </div>
+        </header>
+
+        <!-- TWO-COLUMN WORKSTATION -->
+        <div id="main-grid" class="flex-1 grid grid-cols-1 lg:grid-cols-12 overflow-hidden">
+            
+            <!-- LEFT WORKSTATION PANEL (Vitals, Crew Status, Mars Canvas Radar Scanner) -->
+            <aside class="lg:col-span-5 border-r-2 border-orange-500/20 bg-[#06040a] p-4 md:p-6 flex flex-col gap-5 overflow-y-auto">
+                
+                <!-- Primate Crew Status Panel -->
+                <div class="bg-slate-950/90 p-5 rounded-2xl border border-slate-800/80 flex flex-col gap-4">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-orbitron font-bold text-xs text-orange-400 tracking-wider uppercase flex items-center gap-2">
+                            <span>🐒</span> PRIMATE TEAM TELEMETRY <span>🐵</span>
+                        </h3>
+                        <span class="text-[10px] bg-slate-900 text-slate-400 px-2 py-0.5 rounded font-mono-sci">ARES-99</span>
+                    </div>
+                    
+                    <!-- Crew 1: Sooongsoongyi -->
+                    <div class="flex items-center justify-between border-b border-slate-900 pb-3">
+                        <div class="flex items-center gap-3">
+                            <span class="text-4xl">🐒</span>
+                            <div>
+                                <div class="font-extrabold text-sm text-slate-100 flex items-center gap-1.5">
+                                    <span>Sooongsoongyi</span> 
+                                    <span class="text-[10px] text-amber-500 font-mono-sci uppercase">[Engine]</span>
+                                </div>
+                                <div class="text-xs text-emerald-400">Mainframe & core diagnostics.</div>
+                            </div>
+                        </div>
+                        <span id="crew-soongsoong-status" class="text-[11px] bg-emerald-950/60 text-emerald-400 border border-emerald-500/30 px-2.5 py-1 rounded-lg font-mono-sci font-bold">STABLE</span>
+                    </div>
+
+                    <!-- Crew 2: Soongyi -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <span class="text-4xl">🐵</span>
+                            <div>
+                                <div class="font-extrabold text-sm text-slate-100 flex items-center gap-1.5">
+                                    <span>Soongyi</span> 
+                                    <span class="text-[10px] text-purple-400 font-mono-sci uppercase">[Radio]</span>
+                                </div>
+                                <div class="text-xs text-purple-300">Orbital signal decryption.</div>
+                            </div>
+                        </div>
+                        <span id="crew-soong-status" class="text-[11px] bg-purple-950/60 text-purple-400 border border-purple-500/30 px-2.5 py-1 rounded-lg font-mono-sci font-bold">SCANNING</span>
+                    </div>
+                </div>
+
+                <!-- Vital Ship Systems Metrics -->
+                <div class="bg-slate-950/90 p-5 rounded-2xl border border-slate-800/80 flex flex-col gap-4">
+                    <h3 class="font-orbitron font-bold text-xs text-orange-400 tracking-wider uppercase">LIFE SUPPORT SYSTEMS</h3>
+                    
+                    <!-- Oxygen Gauge (Oxygen level is strictly preserved and locked at 100%) -->
+                    <div>
+                        <div class="flex justify-between text-xs font-bold mb-1">
+                            <span class="text-sky-400 flex items-center gap-1">💨 Oxygen Level</span>
+                            <span id="stat-o2-text" class="text-sky-300">100%</span>
+                        </div>
+                        <div class="w-full bg-slate-900 h-3 rounded-full overflow-hidden border border-slate-800">
+                            <div id="stat-o2-bar" class="bg-sky-500 h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Dome Integrity Gauge -->
+                    <div>
+                        <div class="flex justify-between text-xs font-bold mb-1">
+                            <span class="text-emerald-400 flex items-center gap-1">🛡️ Hull Shield</span>
+                            <span id="stat-hull-text" class="text-emerald-300">100%</span>
+                        </div>
+                        <div class="w-full bg-slate-900 h-3 rounded-full overflow-hidden border border-slate-800">
+                            <div id="stat-hull-bar" class="bg-emerald-500 h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Generator Energy Gauge -->
+                    <div>
+                        <div class="flex justify-between text-xs font-bold mb-1">
+                            <span class="text-amber-400 flex items-center gap-1">⚡ Reactor Energy</span>
+                            <span id="stat-energy-text" class="text-amber-300">100%</span>
+                        </div>
+                        <div class="w-full bg-slate-900 h-3 rounded-full overflow-hidden border border-slate-800">
+                            <div id="stat-energy-bar" class="bg-amber-500 h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mars Holographic Radar Visualizer -->
+                <div id="radar-panel-container" class="bg-slate-950/90 p-5 rounded-2xl border border-slate-800/80 flex flex-col items-center justify-center relative transition-all duration-300">
+                    <div class="w-full flex justify-between items-center mb-3">
+                        <span class="font-orbitron font-bold text-xs text-orange-400 tracking-wider uppercase flex items-center gap-1">
+                            <span class="inline-block w-2 h-2 rounded-full bg-orange-500 animate-ping"></span>
+                            ACTIVE MARS-SCANNER
+                        </span>
+                        <span id="sonar-frequency" class="text-xs font-mono-sci text-orange-500/80">FREQ: 104.2 MHz</span>
+                    </div>
+                    
+                    <!-- Circular canvas container -->
+                    <div id="radar-boundary" class="relative w-72 h-72 bg-[#050308] rounded-full border-2 border-orange-500/30 overflow-hidden flex items-center justify-center cursor-crosshair transition-all duration-300">
+                        <canvas id="radar-canvas" width="288" height="288" class="absolute inset-0 w-full h-full"></canvas>
+                        
+                        <!-- Radar coordinates overlay -->
+                        <div class="absolute inset-0 flex flex-col justify-between p-4 pointer-events-none text-[10px] font-mono-sci text-orange-500/50">
+                            <div class="flex justify-between">
+                                <span>RANGE: 15.0 KM</span>
+                                <span>COORDINATES: SEC-D4</span>
+                            </div>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="w-1/3 h-1/3 rounded-full border border-orange-500/10"></div>
+                                <div class="w-2/3 h-2/3 rounded-full border border-orange-500/10"></div>
+                            </div>
+                            <div class="flex justify-between items-end">
+                                <span>RADAR: RADIAL SWEEP</span>
+                                <span>FILTER: BIO-LOGIC</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Jito Danger Warning Overlays -->
+                        <div id="sonar-alert" class="absolute pointer-events-none animate-bounce text-red-500 font-mono-sci text-[10px] font-bold bg-slate-950/95 px-2.5 py-1 border border-red-500/50 rounded-xl shadow-lg hidden">
+                            ⚠️ UNIDENTIFIED TARGET SPOTTED
+                        </div>
+
+                        <!-- Jito Countdown HUD overlay -->
+                        <div id="jito-hud" class="absolute top-2 left-2 right-2 bg-red-950/95 border-2 border-red-500 rounded-xl p-2 flex flex-col items-center justify-center gap-0.5 shadow-2xl pointer-events-none transition-all duration-300 opacity-0 transform translate-y-[-10px] z-10">
+                            <span class="text-red-400 font-orbitron font-black text-[10px] tracking-wider animate-pulse">👾 ALIEN JITO HAS SPAWNED!</span>
+                            <span class="text-[9px] text-slate-300 font-mono-sci">TAP JITO ON SCANNER TO CAPTURE!</span>
+                            <div class="text-amber-400 font-mono-sci text-xs font-bold bg-slate-900 px-2.5 py-0.5 rounded-md border border-amber-500/30 mt-0.5">
+                                OVERRIDE WINDOW: <span id="jito-countdown" class="text-red-500 font-bold">20</span>s
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="w-full mt-3 bg-slate-900/95 rounded-xl border border-slate-800 p-2.5 text-xs font-mono-sci text-slate-400 flex justify-between items-center">
+                        <span>Active Signatures: <strong id="sonar-count" class="text-orange-400 text-sm">0</strong></span>
+                        <span id="sonar-status" class="text-emerald-400 animate-pulse font-bold">● SCANNER STABLE</span>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- RIGHT COCKPIT MAIN PANEL (Main Screen: Story, TTS interactive voice buttons, decryption game overlays) -->
+            <main class="lg:col-span-7 flex flex-col overflow-hidden bg-slate-950/30">
+                
+                <!-- Narrative Terminal Screen -->
+                <div id="story-panel" class="flex-1 p-6 md:p-8 overflow-y-auto flex flex-col justify-between border-b border-orange-500/10 relative">
+                    <!-- Tech background ambient graphic -->
+                    <div class="absolute top-8 right-8 text-[7rem] opacity-5 select-none pointer-events-none">🚀</div>
+                    
+                    <div id="story-viewport" class="space-y-6">
+                        <div class="border-b border-slate-800 pb-4">
+                            <span class="text-orange-500 text-xs font-mono-sci font-bold">[MARS COCKPIT DATASTREAM FEED]</span>
+                            <h4 class="text-2xl font-black font-orbitron text-slate-200 mt-1">Establishing Connection...</h4>
+                        </div>
+                    </div>
+
+                    <!-- Choices/Actions Board -->
+                    <div id="choices-container" class="mt-8 space-y-4">
+                        <!-- Choices are loaded dynamically -->
+                    </div>
+                </div>
+
+                <!-- Dynamic Sentence Decryption Game overlay panel -->
+                <div id="minigame-container" class="hidden p-6 md:p-8 bg-slate-950 border-t-2 border-orange-500/30 flex-col gap-4 animate-slide-up">
+                    <div class="flex justify-between items-center border-b border-orange-500/20 pb-4">
+                        <div class="flex items-center gap-3">
+                            <span class="text-3xl animate-spin">🛰️</span>
+                            <div>
+                                <span class="text-xs text-amber-500 font-mono-sci tracking-widest block font-bold">⚠️ COCKPIT FIREWALL SECURITY OVERRIDE</span>
+                                <h4 id="minigame-title" class="font-orbitron font-black text-slate-100 text-base md:text-lg">De-scramble Code Transmission!</h4>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs text-slate-400 font-mono-sci block">Hurry! Bypass Timer</span>
+                            <span id="minigame-timer" class="text-amber-500 font-orbitron font-bold text-2xl">25s</span>
+                        </div>
+                    </div>
+
+                    <!-- Mini-game Description -->
+                    <p id="minigame-desc" class="text-sm md:text-base text-slate-300 leading-relaxed font-semibold">
+                        Correctly align the scrambled transmission packet blocks below to establish high-frequency communication protocols!
+                    </p>
+
+                    <!-- Word scramble board -->
+                    <div class="flex flex-col items-center justify-center my-4 gap-4">
+                        <div class="text-slate-400 text-xs font-mono-sci uppercase font-bold tracking-wider">Scrambled Packets (Click to Add):</div>
+                        <div id="word-scramble-pool" class="flex flex-wrap gap-2.5 justify-center">
+                            <!-- Populated dynamically -->
+                        </div>
+                        
+                        <div class="text-slate-400 text-xs font-mono-sci uppercase font-bold tracking-wider">Decoded Sentence Matrix:</div>
+                        <div id="word-answer-slots" class="w-full min-h-[70px] bg-slate-900/80 border-2 border-dashed border-orange-500/40 rounded-2xl flex flex-wrap gap-2.5 items-center justify-center p-4">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between gap-4 text-xs font-mono-sci">
+                        <button id="bypass-reset-btn" class="px-5 py-3 bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-xl transition-all font-bold cursor-pointer">
+                            🔄 Re-Scramble Words
+                        </button>
+                        <button id="bypass-exit-btn" class="px-5 py-3 bg-red-950/40 hover:bg-red-950/90 text-red-400 border border-red-500/30 rounded-xl transition-all font-bold cursor-pointer">
+                            ❌ Skip Override
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SYSTEM LOG JOURNAL TERMINAL -->
+                <footer class="h-40 bg-slate-950 border-t-2 border-orange-500/20 p-4 md:p-5 flex flex-col font-mono-sci overflow-hidden relative">
+                    <div class="absolute top-3 right-5 text-xs text-orange-500/40 uppercase tracking-widest select-none">TRANSMITTER CHAT logs</div>
+                    <div class="flex items-center gap-2 border-b border-slate-900 pb-1.5 mb-1.5 text-xs text-orange-500 font-bold">
+                        <span>⌨️</span>
+                        <span>RADIO OPERATOR MONKEY LOGS</span>
+                    </div>
+                    <div id="terminal-logs" class="flex-1 overflow-y-auto text-xs space-y-1.5 text-orange-400/80 leading-relaxed pr-2">
+                        <!-- Transmissions injected dynamically -->
+                    </div>
+                </footer>
+            </main>
+
+        </div>
+    </div>
+
+    <!-- UI TOAST NOTIFICATION CORNER -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3 pointer-events-none"></div>
+
+    <script>
+        // Define global variables early so that they are guaranteed to exist when classes call them
+        const INITIAL_STATE = {
+            stats: {
+                o2: 100,
+                hull: 100,
+                energy: 100
+            },
+            currentNode: 'intro_command',
+            translateMode: false, // Default translate mode: OFF (starts English first)
+            wrongAnswers: 0,
+            jitoActive: false,
+            jitoTimer: 20,
+            jitoX: 140,
+            jitoY: 140,
+            jitoSpeedX: 1.5,
+            jitoSpeedY: 1.2,
+            jitoInterval: null,
+            jitoSpawnCheckInterval: null
+        };
+
+        let gameState = JSON.parse(JSON.stringify(INITIAL_STATE));
+        let RadarInstance = null;
+        let typingInterval = null; // Critical Fix: Global typing interval tracker to prevent multiple overlapping streams
+        let videoFallbackTimer = null; // Handler for Google Drive stream fallback checks
+
+        const sentenceBypassState = {
+            correctOrder: [],
+            userOrder: [],
+            timer: 25,
+            interval: null,
+            nextNodeSuccess: null
+        };
+
+        // PROLOGUE TEXTS FOR SCROLLING INTRO CHAT LOG
+        const PROLOGUE_TEXT_EN = [
+            "🌌 [ARES-99 COCKPIT DEEP SPACE MISSION SYSTEM ENGAGED]",
+            "Deep in the rust-orange atmosphere of Mars, a marvelous cosmic love story is taking flight!",
+            "Meet Soongyi (🐵) and his brilliant, tech-genius girlfriend, Sooongsoongyi (🐒)!",
+            "They are not ordinary monkeys—they are elite astronauts piloting the Ares-99 spaceship, dedicated to building a beautiful, safe Martian colony base.",
+            "But a terrifying galactic threat looms nearby! Jito (지토), the notorious green alien, is chasing Soongyi to abduct him into his endless deep-space English tutoring class!",
+            "Now, Sooongsoongyi must safely guide the spaceship through cosmic trials and protect her beloved boyfriend Soongyi!"
+        ];
+
+        const PROLOGUE_TEXT_KO = [
+            "🌌 [아레스-99 심우주 통신 데이터 로그 연결 완료]",
+            "화성의 붉은 모래 바람 속에서, 아름다운 우주 연인 원숭이들의 모험이 시작됩니다!",
+            "용감한 파일럿 숭이(🐵)와 그의 기발하고 똑똑한 공학 천재 여자친구, 숭숭이(🐒)를 만나보세요!",
+            "두 원숭이는 결코 형제 사이가 아닙니다! 이들은 멋진 화성 식민지 기지를 건설하기 위해 아레스-99호를 함께 조종하는 우주비행사 커플입니다.",
+            "하지만 거대한 우주 위협이 도사리고 있습니다! 초록 외계인 지토(지토)가 숭이를 '지옥의 24시간 우주 영어 스터디룸'으로 납치해 억지로 과외를 받게 하려고 바짝 쫓아오고 있습니다!",
+            "이제 숭숭이는 우주선 조종 패널을 완벽하게 제어하여 사랑하는 남자친구 숭이를 지토로부터 안전하게 구해야만 합니다!"
+        ];
+
+        let prologueLineInterval = null;
+        let prologueIndex = 0;
+        let prologueCharIndex = 0;
+
+        // UI Toast and Logging helpers defined early to avoid hoisting issues during sound instantiation BGM play call
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            let bgClass = 'bg-slate-950 border-orange-500/50 text-orange-400';
+            if (type === 'error' || type === 'critical') bgClass = 'bg-red-950/90 border-red-500 text-red-400 neon-border-red';
+            if (type === 'success') bgClass = 'bg-slate-900 border-purple-500 text-purple-300';
+            
+            toast.className = `p-4 rounded-2xl border-2 text-sm font-bold flex items-center justify-between gap-4 min-w-[280px] max-w-sm shadow-2xl transition-all duration-300 transform translate-y-2 opacity-0 ${bgClass}`;
+            
+            toast.innerHTML = `
+                <span>${message}</span>
+                <button class="text-slate-400 hover:text-white text-lg font-black font-mono-sci" onclick="this.parentElement.remove()">&times;</button>
+            `;
+            
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.remove('opacity-0', 'translate-y-2');
+            }, 50);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 4500);
+        }
+
+        function appendTerminalLog(message, isSystem = true) {
+            const container = document.getElementById('terminal-logs');
+            if (!container) return; // Prevent logging before page elements compile
+            const logRow = document.createElement('div');
+            
+            const timestamp = new Date().toLocaleTimeString();
+            logRow.className = isSystem ? 'text-orange-400/90' : 'text-purple-400/90';
+            logRow.innerHTML = `<span class="text-orange-600 font-bold">[${timestamp}]</span> ${message}`;
+            
+            container.appendChild(logRow);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function triggerSystemLogsChatter() {
+            const chatter = [
+                "🛰️ Passive scanner sweep complete: no hull breaches detected.",
+                "🐵 Radio Monkey: English signal remains readable.",
+                "🐒 Engine Monkey: Reactor grammar matrix is stable.",
+                "📡 Mars dust interference reduced by 2.7%.",
+                "🔎 Lesson telemetry saved to cockpit memory buffer."
+            ];
+            const message = chatter[Math.floor(Math.random() * chatter.length)];
+            appendTerminalLog(message, true);
+        }
+
+        // Fisher-Yates array shuffling logic for options randomization
+        function shuffleArray(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        class MarsPrimateSoundController {
+            constructor() {
+                this.initialized = false;
+                this.muted = false;
+                
+                // Audio Elements
+                this.bgmAudio = new Audio();
+                this.bgmAudio.loop = true;
+                
+                // Pure HTML5 streaming sources
+                this.sources = {
+                    cyberpunk: "https://storage.googleapis.com/eunyeongsmusicfiles/Cyberpunk%202077%20Breathtaking%20Mix%20%20by%20Extra%20Terra.mp3",
+                    sadViolin: "https://storage.googleapis.com/eunyeongsmusicfiles/This%20Violin%20Hurts%20More%20Than%20Words%20%E2%80%93%20Deep%20Emotional%20Sad%20Violin%20Solo.mp3",
+                    stillDre: "https://storage.googleapis.com/eunyeongsmusicfiles/Still%20D.R.E.%20(Instrumental)%20%5B3MufzuaKfZg%5D.mp3",
+                    mozartHiphop: "https://storage.googleapis.com/eunyeongsmusicfiles/(playlist)%20%EB%AA%A8%EC%B0%A8%EB%A5%B4%ED%8A%B8%EA%B0%80%20%EC%9A%94%EC%A6%98%20%ED%83%9C%EC%96%B4%EB%82%AC%EC%9C%BC%EB%A9%B4%20%ED%9E%99%ED%95%A9%20%EB%B9%84%ED%8A%B8%20%EC%B0%8D%EC%97%88%EC%9D%84%EB%93%AF%20%E3%85%87%E3%85%88_%20_%20%ED%81%B4%EB%9E%98%EC%8B%9D%20%EC%9D%8C%EC%95%85%2C%20%EA%B7%BC%EB%8D%B0%20%EC%9D%B4%EC%A0%9C%20%ED%9E%99%ED%95%A9%EC%9D%8C%20%EA%B3%81%EB%93%A4%EC%9D%B8%20%ED%94%8C%EB%A0%88%EC%9D%B4%EB%A6%AC%EC%8A%A4%ED%8A%B8.mp3"
+                };
+
+                this.pingSynth = null;
+                this.clickSynth = null;
+                this.sirenSynth = null;
+                this.sirenInterval = null;
+            }
+
+            async init() {
+                if (this.initialized) return;
+
+                // Tone.js context unlock for SFX. If CDN is unavailable, keep the game playable without SFX.
+                if (typeof Tone === 'undefined') {
+                    console.warn('Tone.js unavailable: sound effects disabled, BGM only.');
+                    this.initialized = true;
+                    this.playBGM('cyberpunk');
+                    return;
+                }
+                await Tone.start();
+
+                const limiter = new Tone.Limiter(-2).toDestination();
+
+                const delay = new Tone.PingPongDelay({
+                    delayTime: "4n.",
+                    feedback: 0.35,
+                    wet: 0.3
+                }).connect(limiter);
+
+                this.pingSynth = new Tone.Synth({
+                    oscillator: { type: "triangle" },
+                    envelope: {
+                        attack: 0.005,
+                        decay: 0.6,
+                        sustain: 0,
+                        release: 0.8
+                    },
+                    volume: -10
+                }).connect(delay);
+
+                this.clickSynth = new Tone.MonoSynth({
+                    oscillator: { type: "square" },
+                    envelope: {
+                        attack: 0.002,
+                        decay: 0.03,
+                        sustain: 0,
+                        release: 0.03
+                    },
+                    volume: -12
+                }).connect(limiter);
+
+                this.sirenSynth = new Tone.Synth({
+                    oscillator: { type: "sawtooth" },
+                    envelope: {
+                        attack: 0.05,
+                        decay: 0.1,
+                        sustain: 0.5,
+                        release: 0.1
+                    },
+                    volume: -14
+                }).toDestination();
+
+                this.initialized = true;
+                
+                // Play Main Cyberpunk BGM
+                this.playBGM('cyberpunk');
+            }
+
+            playBGM(type) {
+                if (this.muted) return;
+                try {
+                    this.bgmAudio.src = this.sources[type];
+                    this.bgmAudio.currentTime = 0;
+                    this.bgmAudio.play().catch(e => console.log("Audio play error: ", e));
+                    appendTerminalLog(`🌌 BGM STREAM LOADED: ${type.toUpperCase()}`, true);
+                } catch (e) {
+                    console.error("Failed to load audio stream:", e);
+                }
+            }
+
+            stopBGM() {
+                this.bgmAudio.pause();
+            }
+
+            playPing() {
+                if (!this.initialized || this.muted) return;
+                try { this.pingSynth.triggerAttackRelease("C6", "16n"); } catch(e) {}
+            }
+
+            playClick() {
+                if (!this.initialized || this.muted) return;
+                try { this.clickSynth.triggerAttackRelease("A3", "32n"); } catch(e) {}
+            }
+
+            playSuccess() {
+                if (!this.initialized || this.muted) return;
+                try {
+                    const now = Tone.now();
+                    this.clickSynth.triggerAttackRelease("D4", "16n", now);
+                    this.clickSynth.triggerAttackRelease("F#4", "16n", now + 0.08);
+                    this.clickSynth.triggerAttackRelease("A4", "16n", now + 0.16);
+                } catch(e) {}
+            }
+
+            playFailure() {
+                if (!this.initialized || this.muted) return;
+                try {
+                    const now = Tone.now();
+                    this.clickSynth.triggerAttackRelease("D3", "8n", now);
+                    this.clickSynth.triggerAttackRelease("Bb2", "8n", now + 0.12);
+                } catch(e) {}
+            }
+
+            startJitoAlarm() {
+                this.stopJitoAlarm();
+                let isHigh = false;
+                
+                this.sirenInterval = setInterval(() => {
+                    if (this.muted || !this.initialized) return;
+                    try {
+                        const timerValue = gameState.jitoTimer;
+                        const toneFreq = isHigh ? (420 + (20 - timerValue) * 30) : (210 + (20 - timerValue) * 15);
+                        this.sirenSynth.triggerAttackRelease(toneFreq, "8n");
+                        isHigh = !isHigh;
+                    } catch(e) {}
+                }, 300);
+            }
+
+            stopJitoAlarm() {
+                if (this.sirenInterval) {
+                    clearInterval(this.sirenInterval);
+                    this.sirenInterval = null;
+                }
+            }
+
+            toggleMute() {
+                this.muted = !this.muted;
+                if (this.muted) {
+                    this.bgmAudio.pause();
+                } else {
+                    this.bgmAudio.play().catch(e => console.log(e));
+                }
+                return this.muted;
+            }
+        }
+
+        const AudioCtrl = new MarsPrimateSoundController();
+
+        function speakEnglishText(text) {
+            if ('speechSynthesis' in window) {
+                const sanitized = text
+                    .replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, "") // Emojis
+                    .replace(/\([A-Z]\)/g, "") // choice letter indexes
+                    .replace(/['"]+/g, ''); // single/double quotes
+
+                const utterance = new SpeechSynthesisUtterance(sanitized);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.85; 
+                utterance.pitch = 1.0;
+
+                window.speechSynthesis.cancel(); 
+                window.speechSynthesis.speak(utterance);
+            } else {
+                showToast("🔊 TTS Voice Synthesis is not supported in this browser.", "info");
+            }
+        }
+
+        const JitoImage = new Image();
+        JitoImage.src = "https://lh3.googleusercontent.com/d/1v9en1wiX8tbgMnexd_qweo-JW3Aa3fvE";
+        JitoImage.loaded = false;
+        JitoImage.onload = () => { JitoImage.loaded = true; };
+
+        class MarsSurfaceScanner {
+            constructor(canvasId) {
+                this.canvas = document.getElementById(canvasId);
+                this.ctx = this.canvas.getContext('2d');
+                this.angle = 0;
+                this.targets = [];
+                this.sweepSpeed = 0.02; 
+                this.resize();
+                window.addEventListener('resize', () => this.resize());
+            }
+
+            resize() {
+                const parent = this.canvas.parentElement;
+                const w = parent.clientWidth || 288;
+                const h = parent.clientHeight || 288;
+                this.canvas.width = w;
+                this.canvas.height = h;
+            }
+
+            addTarget(id, name, distancePct, angleDeg, type = 'normal') {
+                this.targets.push({
+                    id,
+                    name,
+                    dist: distancePct,
+                    angle: (angleDeg * Math.PI) / 180,
+                    alpha: 0,
+                    type,
+                    discovered: false
+                });
+            }
+
+            clearTargets() {
+                this.targets = [];
+            }
+
+            updateAndDraw() {
+                const ctx = this.ctx;
+                const width = this.canvas.width;
+                const height = this.canvas.height;
+                const cx = width / 2;
+                const cy = height / 2;
+                const radius = Math.max(0, Math.min(cx, cy) - 10);
+
+                ctx.clearRect(0, 0, width, height);
+                if (radius <= 0) {
+                    requestAnimationFrame(() => this.updateAndDraw());
+                    return;
+                }
+
+                // Concertina scanner grid circles
+                ctx.strokeStyle = 'rgba(249, 115, 22, 0.08)';
+                ctx.lineWidth = 1.5;
+                for (let r = radius / 3; r <= radius; r += radius / 3) {
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+
+                // Compass crosshairs
+                ctx.beginPath();
+                ctx.moveTo(cx - radius, cy); ctx.lineTo(cx + radius, cy);
+                ctx.moveTo(cx, cy - radius); ctx.lineTo(cx, cy + radius);
+                ctx.stroke();
+
+                // Rotate scan vector
+                this.angle += this.sweepSpeed;
+                if (this.angle >= Math.PI * 2) {
+                    this.angle -= Math.PI * 2;
+                }
+
+                // Radiant scan sector
+                ctx.save();
+                ctx.translate(cx, cy);
+                ctx.rotate(this.angle);
+                
+                const sweepGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, radius);
+                sweepGrad.addColorStop(0, 'rgba(249, 115, 22, 0.2)');
+                sweepGrad.addColorStop(0.8, 'rgba(249, 115, 22, 0.05)');
+                sweepGrad.addColorStop(1, 'rgba(249, 115, 22, 0)');
+
+                ctx.fillStyle = sweepGrad;
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.arc(0, 0, radius, -0.25, 0);
+                ctx.closePath();
+                ctx.fill();
+
+                // Bright sweeping sweep border line
+                ctx.strokeStyle = 'rgba(249, 115, 22, 0.55)';
+                ctx.lineWidth = 2.5;
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.lineTo(radius, 0);
+                ctx.stroke();
+                ctx.restore();
+
+                // Render Alien Jito if active
+                if (gameState && gameState.jitoActive) {
+                    // Gentle drifting oscillation within bounds
+                    gameState.jitoX += gameState.jitoSpeedX;
+                    gameState.jitoY += gameState.jitoSpeedY;
+
+                    const boundaryPadding = 30;
+                    if (gameState.jitoX < boundaryPadding || gameState.jitoX > width - boundaryPadding) gameState.jitoSpeedX *= -1;
+                    if (gameState.jitoY < boundaryPadding || gameState.jitoY > height - boundaryPadding) gameState.jitoSpeedY *= -1;
+
+                    const jx = gameState.jitoX;
+                    const jy = gameState.jitoY;
+
+                    const elapsed = 20 - gameState.jitoTimer;
+                    const sizeScale = 35 + (elapsed / 20) * 165; 
+
+                    const pulseGlow = Math.sin(Date.now() / 90) * 0.5 + 0.5;
+                    ctx.fillStyle = `rgba(239, 68, 68, ${pulseGlow * 0.12 * (elapsed / 10)})`;
+                    ctx.beginPath();
+                    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    if (JitoImage.loaded) {
+                        ctx.save();
+                        ctx.shadowColor = '#ef4444';
+                        ctx.shadowBlur = 15 + Math.sin(Date.now() / 80) * 10;
+                        ctx.beginPath();
+                        ctx.arc(jx, jy, sizeScale / 2, 0, Math.PI * 2);
+                        ctx.clip();
+                        ctx.drawImage(JitoImage, jx - sizeScale / 2, jy - sizeScale / 2, sizeScale, sizeScale);
+                        ctx.restore();
+                    } else {
+                        // Backup high-tech green vector representation of Jito
+                        ctx.save();
+                        ctx.translate(jx, jy);
+                        ctx.shadowColor = '#10b981';
+                        ctx.shadowBlur = sizeScale * 0.2;
+
+                        ctx.fillStyle = '#10b981';
+                        ctx.strokeStyle = '#34d399';
+                        ctx.lineWidth = Math.max(1.5, sizeScale * 0.03);
+                        ctx.beginPath();
+                        ctx.ellipse(0, 0, sizeScale * 0.45, sizeScale * 0.35, 0, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.stroke();
+
+                        ctx.strokeStyle = '#34d399';
+                        ctx.lineWidth = Math.max(2, sizeScale * 0.04);
+                        ctx.beginPath();
+                        ctx.moveTo(-sizeScale * 0.18, -sizeScale * 0.25);
+                        ctx.quadraticCurveTo(-sizeScale * 0.3, -sizeScale * 0.45, -sizeScale * 0.25, -sizeScale * 0.6);
+                        ctx.stroke();
+
+                        ctx.beginPath();
+                        ctx.moveTo(sizeScale * 0.18, -sizeScale * 0.25);
+                        ctx.quadraticCurveTo(sizeScale * 0.3, -sizeScale * 0.45, sizeScale * 0.25, -sizeScale * 0.6);
+                        ctx.stroke();
+
+                        const blink = Math.sin(Date.now() / 150) > 0 ? '#fbbf24' : '#ef4444';
+                        ctx.fillStyle = blink;
+                        ctx.beginPath();
+                        ctx.arc(-sizeScale * 0.25, -sizeScale * 0.6, sizeScale * 0.07, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.beginPath();
+                        ctx.arc(sizeScale * 0.25, -sizeScale * 0.6, sizeScale * 0.07, 0, Math.PI * 2);
+                        ctx.fill();
+
+                        ctx.fillStyle = '#080410';
+                        ctx.strokeStyle = '#6ee7b7';
+                        ctx.lineWidth = 1;
+                        
+                        ctx.save();
+                        ctx.translate(-sizeScale * 0.15, -sizeScale * 0.04);
+                        ctx.rotate(0.12);
+                        ctx.beginPath();
+                        ctx.ellipse(0, 0, sizeScale * 0.11, sizeScale * 0.16, 0, 0, Math.PI * 2);
+                        ctx.fill(); ctx.stroke();
+                        ctx.fillStyle = '#ffffff';
+                        ctx.beginPath();
+                        ctx.arc(sizeScale * 0.03, -sizeScale * 0.05, sizeScale * 0.035, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.restore();
+
+                        ctx.save();
+                        ctx.translate(sizeScale * 0.15, -sizeScale * 0.04);
+                        ctx.rotate(-0.12);
+                        ctx.beginPath();
+                        ctx.ellipse(0, 0, sizeScale * 0.11, sizeScale * 0.16, 0, 0, Math.PI * 2);
+                        ctx.fill(); ctx.stroke();
+                        ctx.fillStyle = '#ffffff';
+                        ctx.beginPath();
+                        ctx.arc(-sizeScale * 0.03, -sizeScale * 0.05, sizeScale * 0.035, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.restore();
+
+                        ctx.strokeStyle = '#050308';
+                        ctx.lineWidth = Math.max(2, sizeScale * 0.035);
+                        ctx.beginPath();
+                        ctx.arc(0, sizeScale * 0.08, sizeScale * 0.12, 0.15 * Math.PI, 0.85 * Math.PI);
+                        ctx.stroke();
+
+                        ctx.restore();
+                    }
+
+                    // Hazard Targeting Ring
+                    ctx.strokeStyle = 'rgba(239, 68, 68, 0.85)';
+                    ctx.lineWidth = 2.5;
+                    ctx.beginPath();
+                    ctx.arc(jx, jy, (sizeScale / 2) + 12 + Math.sin(Date.now() / 120) * 8, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+
+                // Render stationary scan blips
+                let currentBlips = 0;
+                this.targets.forEach(target => {
+                    let diff = this.angle - target.angle;
+                    if (diff < 0) diff += Math.PI * 2;
+
+                    if (diff < 0.22) {
+                        target.alpha = 1.0;
+                        if (!target.discovered) {
+                            target.discovered = true;
+                            showToast(`📡 Radar Blip Found: ${target.name}`, 'info');
+                            appendTerminalLog(`📡 SCANNER OVERLAY: Decrypted target [${target.name}] at distance ${Math.round(target.dist*10)}km.`, true);
+                        }
+                    } else {
+                        target.alpha -= 0.004;
+                        if (target.alpha < 0) target.alpha = 0;
+                    }
+
+                    if (target.alpha > 0) {
+                        currentBlips++;
+                        const tx = cx + Math.cos(target.angle) * target.dist * radius;
+                        const ty = cy + Math.sin(target.angle) * target.dist * radius;
+
+                        ctx.save();
+                        ctx.globalAlpha = target.alpha;
+                        
+                        if (target.type === 'alert' || target.type === 'hostile') {
+                            ctx.fillStyle = '#ef4444';
+                            ctx.shadowColor = '#ef4444';
+                        } else if (target.type === 'resource') {
+                            ctx.fillStyle = '#f59e0b';
+                            ctx.shadowColor = '#f59e0b';
+                        } else {
+                            ctx.fillStyle = '#a855f7';
+                            ctx.shadowColor = '#a855f7';
+                        }
+                        ctx.shadowBlur = 8;
+
+                        ctx.beginPath();
+                        ctx.arc(tx, ty, 5 + Math.sin(Date.now() / 150) * 1.5, 0, Math.PI * 2);
+                        ctx.fill();
+
+                        ctx.fillStyle = '#ffffff';
+                        ctx.beginPath();
+                        ctx.arc(tx, ty, 2, 0, Math.PI * 2);
+                        ctx.fill();
+
+                        ctx.fillStyle = 'rgba(249, 115, 22, 0.9)';
+                        ctx.font = 'bold 10px "Share Tech Mono"';
+                        ctx.fillText(`${target.name} (${Math.round(target.dist * 10)}km)`, tx + 8, ty - 2);
+                        ctx.restore();
+                    }
+                });
+
+                if (gameState) {
+                    document.getElementById('sonar-count').innerText = currentBlips + (gameState.jitoActive ? 1 : 0);
+                }
+                
+                // Adjust hazard CSS highlights
+                const isCrisis = this.targets.some(t => t.alpha > 0.15 && t.type === 'hostile') || (gameState && gameState.jitoActive);
+                const alarmEl = document.getElementById('sonar-alert');
+                const boundaryEl = document.getElementById('radar-boundary');
+                const panelEl = document.getElementById('radar-panel-container');
+
+                if (isCrisis) {
+                    if (alarmEl) alarmEl.classList.remove('hidden');
+                } else {
+                    if (alarmEl) alarmEl.classList.add('hidden');
+                }
+
+                if (gameState && gameState.jitoActive) {
+                    if (boundaryEl) {
+                        boundaryEl.classList.add('neon-border-red');
+                        boundaryEl.classList.remove('border-orange-500/30');
+                    }
+                    if (panelEl) panelEl.classList.add('emergency-active');
+                } else {
+                    if (boundaryEl) {
+                        boundaryEl.classList.remove('neon-border-red');
+                        boundaryEl.classList.add('border-orange-500/30');
+                    }
+                    if (panelEl) panelEl.classList.remove('emergency-active');
+                }
+
+                requestAnimationFrame(() => this.updateAndDraw());
+            }
+        }
+
+        const STORY_TREE = {
+            // ================== GRADE 4 SYLLABUS ==================
+            intro_command: {
+                title: "🔴 [Mission 1/20] Morning Greetings at Ares Base (Grade 4)",
+                text: "The icy Martian wind is howling outside! Inside the dome, Soongyi (🐵) welcomes you with a warm, cozy smile. Let's start our mission safely with a friendly hello!",
+                ko: {
+                    title: "🔴 [미션 1/20] 아레스 기지의 아침 인사 (4학년)",
+                    text: "차가운 화성의 모래바람이 기지 밖에서 불어치고 있습니다! 돔 기지 안에서 숭이(🐵)가 밝고 다정한 미소로 당신을 환영합니다. 다정하게 인사를 건네며 미션을 기분 좋게 시작해봅시다!"
+                },
+                onEnter: () => {
+                    RadarInstance.clearTargets();
+                    RadarInstance.addTarget('unknown_signal', 'MARTIAN_FREQ_77', 0.65, 45, 'normal');
+                },
+                choices: [
+                    { 
+                        text: "🐵 'Good morning!' (A)", 
+                        ko: "🐵 '좋은 아침입니다!' (A)",
+                        next: "node_2_whats_this", 
+                        stats: { energy: 5 } 
+                    },
+                    { 
+                        text: "🐒 'Good evening!' (B)", 
+                        ko: "🐒 '좋은 저녁입니다!' (B)",
+                        next: "node_2_whats_this", 
+                        isWrong: true,
+                        stats: { energy: -15, hull: -5 } 
+                    },
+                    {
+                        text: "👽 'Good night!' (C)",
+                        ko: "👽 '안녕히 주무세요!' (C)",
+                        next: "node_2_whats_this",
+                        isWrong: true,
+                        stats: { energy: -5, hull: -15 }
+                    }
+                ]
+            },
+            node_2_whats_this: {
+                title: "🔴 [Mission 2/20] Identifying Strange Tools (Grade 4)",
+                text: "Sooongsoongyi (🐒) holds up a heavy metallic object that looks like a high-tech wrench hammer. Soongyi asks: 'What is this?' How should you reply?",
+                ko: {
+                    title: "🔴 [미션 2/20] 신기한 도구 구별하기 (4학년)",
+                    text: "숭숭이(🐒)가 반짝이는 금속 재질의 우주 망치를 양손에 들고 흔들고 있습니다. 숭이(🐵)가 손짓하며 질문합니다. '이것은 무엇인가요 (What is this?)' 어떻게 대답할까요?"
+                },
+                choices: [
+                    { 
+                        text: "🐒 'It's a hammer.' (A)", 
+                        ko: "🐒 '그것은 망치야.' (A)",
+                        next: "node_3_what_time", 
+                        stats: { energy: 5 } 
+                    },
+                    { 
+                        text: "🐵 'It's a dog.' (B)", 
+                        ko: "🐵 '그것은 강아지야.' (B)",
+                        next: "node_3_what_time", 
+                        isWrong: true,
+                        stats: { energy: -10, hull: -10 } 
+                    },
+                    {
+                        text: "👽 'It's a banana.' (C)",
+                        ko: "👽 '그것은 바나나야.' (C)",
+                        next: "node_3_what_time",
+                        isWrong: true,
+                        stats: { energy: -20, hull: -5 }
+                    }
+                ]
+            },
+            node_3_what_time: {
+                title: "🔴 [Mission 3/20] Checking the Reactor Clock (Grade 4)",
+                text: "The main reactor core requires scheduled maintenance at exactly 10:30. Soongyi (🐵) glances at the console and asks: 'What time is it?' Choose the correct reactor clock state!",
+                ko: {
+                    title: "🔴 [미션 3/20] 원자로 시계 판독하기 (4학년)",
+                    text: "메인 원자로 발전기는 오전 10시 30분에 정확하게 냉각 세척을 해주어야 합니다. 숭이(🐵)가 제어판 시계를 보며 묻습니다. '지금 몇 시인가요 (What time is it?)' 제어판의 숫자를 정확히 읽어주세요!"
+                },
+                choices: [
+                    { 
+                        text: "🐵 'It's ten thirty.' (A)", 
+                        ko: "🐵 '지금은 10시 30분이야.' (A)",
+                        next: "node_4_likes", 
+                        stats: { energy: 10 } 
+                    },
+                    { 
+                        text: "🐒 'It's nine o'clock.' (B)", 
+                        ko: "🐒 '지금은 9시 정각이야.' (B)",
+                        next: "node_4_likes", 
+                        isWrong: true,
+                        stats: { energy: -15, hull: -10 } 
+                    },
+                    {
+                        text: "👽 'It's tomorrow.' (C)",
+                        ko: "👽 '지금은 내일이야.' (C)",
+                        next: "node_4_likes",
+                        isWrong: true,
+                        stats: { energy: -5, hull: -20 }
+                    }
+                ]
+            },
+            node_4_likes: {
+                title: "🔴 [Mission 4/20] Fueling the Crew with Fruit (Grade 4)",
+                text: "The monkeys are getting tired. Sooongsoongyi (🐒) points excitedly to a vacuum-sealed crate of fresh space apples. He asks: 'Do you like apples?'",
+                ko: {
+                    title: "🔴 [미션 4/20] 과일 에너지를 공급하라 (4학년)",
+                    text: "숭이들이 피곤해하기 시작합니다. 숭숭이(🐒)가 진공 밀봉된 신선한 우주 사과 바구니를 보며 눈을 반짝입니다. '너는 사과를 좋아하니 (Do you like apples?)'라고 물어보네요!"
+                },
+                choices: [
+                    { 
+                        text: "🐒 'Yes, I do.' (A)", 
+                        ko: "🐒 '응, 정말 좋아해.' (A)",
+                        next: "node_5_lets_play", 
+                        stats: { energy: 10 } 
+                    },
+                    { 
+                        text: "🐵 'No, I don't like bananas.' (B)", 
+                        ko: "🐵 '아니, 나는 바나나를 안 좋아해.' (B)",
+                        next: "node_5_lets_play", 
+                        isWrong: true,
+                        stats: { energy: -10, hull: -5 } 
+                    },
+                    {
+                        text: "👽 'I am an apple.' (C)",
+                        ko: "👽 '나는 사과야.' (C)",
+                        next: "node_5_lets_play",
+                        isWrong: true,
+                        stats: { energy: -5, hull: -15 }
+                    }
+                ]
+            },
+            node_5_lets_play: {
+                title: "🔴 [Mission 5/20] Rest Break Proposal (Grade 4)",
+                text: "The crew stabilized the reactor and successfully isolated the oxygen leak. To celebrate, Soongyi bounces a magnetic ball and suggests: 'Let's play soccer.' What is the proper response?",
+                ko: {
+                    title: "🔴 [미션 5/20] 활기찬 쉬는 시간 제안 (4학년)",
+                    text: "대원들이 원자로와 산소 탱크 균열을 훌륭히 수리했습니다. 신이 난 숭이(🐵)가 중력 축구공을 통통 튕기며 신나게 외칩니다. '축구하자! (Let's play soccer.)' 가장 어울리는 대답은 무엇일까요?"
+                },
+                choices: [
+                    { 
+                        text: "🐵 'Sounds great!' (A)", 
+                        ko: "🐵 '정말 멋진 생각이야!' (A)",
+                        next: "node_6_belonging", 
+                        stats: { energy: 10 } 
+                    },
+                    { 
+                        text: "🐒 'No, thank you, I have no home.' (B)", 
+                        ko: "🐒 '아니 고마워, 난 집이 없어.' (B)",
+                        next: "node_6_belonging", 
+                        isWrong: true,
+                        stats: { energy: -15, hull: -10 } 
+                    },
+                    {
+                        text: "👽 'I hate play.' (C)",
+                        ko: "👽 '나는 노는 게 정말 싫어.' (C)",
+                        next: "node_6_belonging",
+                        isWrong: true,
+                        stats: { energy: -5, hull: -20 }
+                    }
+                ]
+            },
+            node_6_belonging: {
+                title: "🔴 [Mission 6/20] The Lost Spacesuit Helmet (Grade 4)",
+                text: "Sooongsoongyi (🐒) discovers an extra carbon-fiber helmet left on the floor. He holds it up and inquires: 'Whose helmet is this?' Help him claim the gear properly!",
+                ko: {
+                    title: "🔴 [미션 6/20] 조난된 헬멧 주인을 찾아라 (4학년)",
+                    text: "숭숭이(🐒)가 조종석 구석 바닥에 굴러다니는 카본 산소 헬멧을 발견했습니다. 헬멧을 번쩍 들어 올리며 '이것은 누구의 헬멧이니 (Whose helmet is this?)'라고 묻습니다. 주인을 밝혀주세요!"
+                },
+                choices: [
+                    { 
+                        text: "🐒 'It is mine.' (A)", 
+                        ko: "🐒 '그건 내 거야.' (A)",
+                        next: "node_7_weather", 
+                        stats: { hull: 10 } 
+                    },
+                    { 
+                        text: "🐵 'It is a bag.' (B)", 
+                        ko: "🐵 '그것은 가방이야.' (B)",
+                        next: "node_7_weather", 
+                        isWrong: true,
+                        stats: { energy: -10, hull: -15 } 
+                    },
+                    {
+                        text: "👽 'It is a space alien.' (C)",
+                        ko: "👽 '그것은 우주 외계인이야.' (C)",
+                        next: "node_7_weather",
+                        isWrong: true,
+                        stats: { energy: -20, hull: -5 }
+                    }
+                ]
+            },
+            node_7_weather: {
+                title: "🔴 [Mission 7/20] Martian Weather Observation (Grade 4)",
+                text: "The scanner tracks an approaching rust-orange dust storm outside the dome. Soongyi (🐵) peers out the panoramic window and asks: 'How is the weather?'",
+                ko: {
+                    title: "🔴 [미션 7/20] 화성의 날씨 보고 (4학년)",
+                    text: "화성의 외곽 스캐너가 대규모 붉은 모래 폭풍이 몰려오고 있음을 경고합니다. 창밖을 유심히 살피던 숭이(🐵)가 다가와 묻습니다. '밖의 날씨가 어때 (How is the weather?)'"
+                },
+                choices: [
+                    { 
+                        text: "🐵 'It's windy.' (A)", 
+                        ko: "🐵 '바람이 쌩쌩 불어.' (A)",
+                        next: "milestone_1_trigger", 
+                        stats: { energy: 10 } 
+                    },
+                    { 
+                        text: "🐒 'It's delicious.' (B)", 
+                        ko: "🐒 '참 맛있어.' (B)",
+                        next: "milestone_1_trigger", 
+                        isWrong: true,
+                        stats: { energy: -15, hull: -10 } 
+                    },
+                    {
+                        text: "👽 'It's purple.' (C)",
+                        ko: "👽 '날씨가 보라색이야.' (C)",
+                        next: "milestone_1_trigger",
+                        isWrong: true,
+                        stats: { energy: -5, hull: -20 }
+                    }
+                ]
+            },
+
+            // ================== GRADE 4 TO 5 MILESTONE SYSTEM ==================
+            milestone_1_trigger: {
+                title: "🔒 [Milestone 1/3] Grade 5 Mainframe Encryption",
+                text: "Fantastic! You completed all Grade 4 missions. However, the connection to Grade 5 database files is locked behind an encrypted firewall. Sooongsoongyi needs you to de-scramble the password sentence to access the coordinates!",
+                ko: {
+                    title: "🔒 [등급 관문 1/3] 5학년 메인프레임 방화벽 암호화",
+                    text: "훌륭합니다! 4학년 과정을 멋지게 완수하셨습니다. 하지만 다음 등급인 5학년의 주요 항법 일지를 해독하기 위해서는 강력한 영어 암호 해독 방화벽을 풀어야 합니다. 숭숭이를 도와 단어 블록을 완성하세요!"
+                },
+                choices: [
+                    { 
+                        text: "📡 Engage Decryption Override", 
+                        ko: "📡 통신 디코딩 오버라이드 시작",
+                        next: "trigger_m1_game" 
+                    }
+                ]
+            },
+            trigger_m1_game: {
+                title: "🛰️ Encryption De-scrambler Matrix",
+                text: "Connecting to the decryptor terminal... Get ready to reconstruct the sentence correctly!",
+                ko: {
+                    title: "🛰️ 암호 해독 패킷 매트릭스",
+                    text: "해독 컴퓨터 터미널에 접속 중... 문장을 문법에 맞게 올바르게 재배열해 주세요!"
+                },
+                onEnter: () => {
+                    triggerMilestoneDecryption("Where is the library ?", "node_8_library", "Decrypt Grade 5 Database!", "Connect the scrambled word blocks so the monkeys can locate the technical library room!");
+                },
+                choices: []
+            },
+
+            // ================== GRADE 5 SYLLABUS ==================
+            node_8_library: {
+                title: "🔴 [Mission 8/20] Navigating the Base Archives (Grade 5)",
+                text: "You cracked the firewall and accessed Grade 5 files! To repair the main communication arrays, we must fetch the design plans from the archive room. How should we ask the computer where the library is?",
+                ko: {
+                    title: "🔴 [미션 8/20] 디지털 보관소 위치 파악 (5학년)",
+                    text: "암호를 풀어 5학년 파일을 열었습니다! 스캐너 회로도를 찾기 위해 디지털 보관실(도서관)을 찾아가야 합니다. 컴퓨터 터미널에 도서관 위치를 어떻게 물어볼까요?"
+                },
+                choices: [
+                    { 
+                        text: "🐵 'Where is the library?' (A)", 
+                        ko: "🐵 '도서관은 어디에 있습니까?' (A)",
+                        next: "node_9_dont_touch", 
+                        stats: { energy: 10 } 
+                    },
+                    { 
+                        text: "🐒 'What is the library doing?' (B)", 
+                        ko: "🐒 '도서관은 지금 무엇을 하고 있습니까?' (B)",
+                        next: "node_9_dont_touch", 
+                        isWrong: true,
+                        stats: { energy: -15, hull: -10 } 
+                    },
+                    {
+                        text: "👽 'Who are you, library?' (C)",
+                        ko: "👽 '도서관님, 당신은 누구십니까?' (C)",
+                        next: "node_9_dont_touch",
+                        isWrong: true,
+                        stats: { energy: -10, hull: -15 }
+                    }
+                ]
+            },
+            node_9_dont_touch: {
+                title: "🔴 [Mission 9/20] Safety Rules in Reactor Control (Grade 5)",
+                text: "A sharp warning light is flashing on a high-voltage core capacitor. Sooongsoongyi (🐒) reaches his hand out close to the hot metal. You must quickly shout: 'Do not touch!'",
+                ko: {
+                    title: "🔴 [미션 9/20] 원자로 제어실 안전 규칙 (5학년)",
+                    text: "고전압 원자로 단자에 위험을 알리는 붉은 경고등이 맹렬하게 반짝입니다. 호기심 많은 숭숭이(🐒)가 뜨거운 충전판에 무심코 손을 뻗습니다! 빨리 경고해주세요!"
+                },
+                choices: [
+                    { 
+                        text: "🐒 'Don't touch!' (A)", 
+                        ko: "🐒 '만지지 마!' (A)",
+                        next: "node_10_what_doing", 
+                        stats: { hull: 15 } 
+                    },
+                    { 
+                        text: "🐵 'Touch please!' (B)", 
+                        ko: "🐵 '제발 그것을 만져줘!' (B)",
+                        next: "node_10_what_doing", 
+                        isWrong: true,
+                        stats: { energy: -20, hull: -20 } 
+                    },
+                    {
+                        text: "👽 'Please eat the core!' (C)",
+                        ko: "👽 '원자로 코어를 제발 맛있게 먹어줘!' (C)",
+                        next: "node_10_what_doing",
+                        isWrong: true,
+                        stats: { energy: -10, hull: -30 }
+                    }
+                ]
+            },
+            node_10_what_doing: {
+                title: "🔴 [Mission 10/20] Active Communication Log (Grade 5)",
+                text: "Soongyi (🐵) is frantically tapping commands into the terminal. You ask him: 'What are you doing?' How should he reply in the active present continuous tense?\n\n🚨 WARNING: COCKPIT SCANNER SIGNALS ARE BECOMING HIGHLY UNSTABLE!",
+                ko: {
+                    title: "🔴 [미션 10/20] 조종실 실시간 작업 확인 (5학년)",
+                    text: "숭이(🐵)가 통신 패널의 자판을 정신없이 두드리고 있습니다. '너 지금 뭐 하고 있어? (What are you doing?)'라고 물어보니, 현재 진행형으로 어떻게 대답을 들려줄까요?\n\n🚨 경고: 우주 정찰 스캐너 신호가 갑자기 요동치기 시작합니다!"
+                },
+                choices: [
+                    { 
+                        text: "🐵 'I am writing a log.' (A)", 
+                        ko: "🐵 '나는 지금 항해 일지를 작성하고 있어.' (A)",
+                        next: "node_11_whose_cap", 
+                        stats: { energy: 10 } 
+                    },
+                    { 
+                        text: "🐒 'I have a cat.' (B)", 
+                        ko: "🐒 '나는 고양이를 한 마리 키워.' (B)",
+                        next: "node_11_whose_cap", 
+                        isWrong: true,
+                        stats: { energy: -15, hull: -10 } 
+                    },
+                    {
+                        text: "👽 'I am flying tomorrow.' (C)",
+                        ko: "👽 '나는 내일 비행하고 있는 중이야.' (C)",
+                        next: "node_11_whose_cap",
+                        isWrong: true,
+                        stats: { energy: -10, hull: -15 }
+                    }
+                ]
+            },
+            node_11_whose_cap: {
+                title: "🔴 [Mission 11/20] Finding the Captain's Cap (Grade 5)",
+                text: "You find a fancy official pilot officer hat placed on the center console chair. Sooongsoongyi (🐒) points to it and asks: 'Whose cap is this?'",
+                ko: {
+                    title: "🔴 [미션 11/20] 캡틴의 모자 주인 확인 (5학년)",
+                    text: "우주 조종관 시트 위에 은색 휘장이 달린 멋진 파일럿 모자가 놓여 있습니다. 숭숭이(🐒)가 이를 집어 들고 묻습니다. '이건 누구의 모자니 (Whose cap is this?)'"
+                },
+                choices: [
+                    { 
+                        text: "🐒 'It's the captain's.' (A)", 
+                        ko: "🐒 '그것은 선장님의 것이야.' (A)",
+                        next: "node_12_food_order", 
+                        stats: { energy: 5 } 
+                    },
+                    { 
+                        text: "🐵 'It is a red color.' (B)", 
+                        ko: "🐵 '그것은 붉은 색깔이야.' (B)",
+                        next: "node_12_food_order", 
+                        isWrong: true,
+                        stats: { energy: -15, hull: -5 } 
+                    },
+                    {
+                        text: "👽 'The cap is sleeping.' (C)",
+                        ko: "👽 '그 모자는 쿨쿨 자는 중이야.' (C)",
+                        next: "node_12_food_order",
+                        isWrong: true,
+                        stats: { energy: -10, hull: -10 }
+                    }
+                ]
+            },
+            node_12_food_order: {
+                title: "🔴 [Mission 12/20] Space Mess Hall Order (Grade 5)",
+                text: "The cockpit food synthesizers are fully powered. Soongyi wants to order lunch. How does he politely ask the computer for a hot galactic burger?",
+                ko: {
+                    title: "🔴 [미션 12/20] 식량 합성기 푸드 주문 (5학년)",
+                    text: "중앙 식당의 고속 분자 식량 합성 장치가 준비되었습니다. 점심을 주문하기 위해 숭이(🐵)가 기계에 맛있고 따끈한 우주 수제 버거를 정중히 주문하려고 합니다."
+                },
+                choices: [
+                    { 
+                        text: "🐵 'I'd like a hamburger.' (A)", 
+                        ko: "🐵 '햄버거 하나 주문하고 싶습니다.' (A)",
+                        next: "node_13_prepositions", 
+                        stats: { energy: 10 } 
+                    },
+                    { 
+                        text: "🐒 'Give me burger now!' (B)", 
+                        ko: "🐒 '지금 당장 고기빵을 바쳐라!' (B)",
+                        next: "node_13_prepositions", 
+                        isWrong: true,
+                        stats: { energy: -20, hull: -10 } 
+                    },
+                    {
+                        text: "👽 'Hamburger likes me!' (C)",
+                        ko: "👽 '햄버거가 나를 정말 좋아해!' (C)",
+                        next: "node_13_prepositions",
+                        isWrong: true,
+                        stats: { energy: -10, hull: -20 }
+                    }
+                ]
+            },
+            node_13_prepositions: {
+                title: "🔴 [Mission 13/20] Locating the Hatch Key (Grade 5)",
+                text: "The primary key card to unlock the science bay hatch is lost. Soongyi looks all around the pilot desk. 'Where is the key?'",
+                ko: {
+                    title: "🔴 [미션 13/20] 제어실 카드키 행방 추적 (5학년)",
+                    text: "과학 연구동 격벽을 열 카드키가 조종판 근처에서 사라졌습니다. 급하게 두리번거리는 숭이(🐵)에게 어디에 놓여있는지 가리키며 말해주세요. '열쇠가 어디 있니 (Where is the key?)'"
+                },
+                choices: [
+                    { 
+                        text: "🐵 'It is on the table.' (A)", 
+                        ko: "🐵 '그건 테이블 위에 올려져 있어.' (A)",
+                        next: "node_14_yesterday_past", 
+                        stats: { hull: 10 } 
+                    },
+                    { 
+                        text: "🐒 'It is under the floor tomorrow.' (B)", 
+                        ko: "🐒 '그것은 내일 바닥 아래에 있을 거야.' (B)",
+                        next: "node_14_yesterday_past", 
+                        isWrong: true,
+                        stats: { energy: -15, hull: -10 } 
+                    },
+                    {
+                        text: "👽 'It is in the air yesterday.' (C)",
+                        ko: "👽 '그것은 어제 공중에 둥둥 떠 있어.' (C)",
+                        next: "node_14_yesterday_past",
+                        isWrong: true,
+                        stats: { energy: -10, hull: -15 }
+                    }
+                ]
+            },
+            node_14_yesterday_past: {
+                title: "🔴 [Mission 14/20] Checking the Yesterday Log (Grade 5)",
+                text: "We need to sync our past flight operations with Earth Central. Soongyi (🐵) asks: 'What did you do yesterday?'",
+                ko: {
+                    title: "🔴 [미션 14/20] 과거 비행 활동 기록 동기화 (5학년)",
+                    text: "지구 중앙 관제소로 과거 비행 업무 일지를 전송해야 합니다. 숭이(🐵)가 질문합니다. '어제 무엇을 하였습니까 (What did you do yesterday?)'"
+                },
+                choices: [
+                    { 
+                        text: "🐵 'I watched a movie.' (A)", 
+                        ko: "🐵 '나는 영화 한 편을 감상했어.' (A)",
+                        next: "milestone_2_trigger", 
+                        stats: { energy: 10 } 
+                    },
+                    { 
+                        text: "🐒 'I will play soccer.' (B)", 
+                        ko: "🐒 '나는 미래에 축구를 할 거야.' (B)",
+                        next: "milestone_2_trigger", 
+                        isWrong: true,
+                        stats: { energy: -15, hull: -10 } 
+                    },
+                    {
+                        text: "👽 'I am watching yesterday.' (C)",
+                        ko: "👽 '나는 어제를 구경하는 중이야.' (C)",
+                        next: "milestone_2_trigger",
+                        isWrong: true,
+                        stats: { energy: -10, hull: -15 }
+                    }
+                ]
+            },
+
+            // ================== GRADE 5 TO 6 MILESTONE SYSTEM ==================
+            milestone_2_trigger: {
+                title: "🔒 [Milestone 2/3] Grade 6 Encryption Wall",
+                text: "Incredible progress, Captain! You solved all Grade 5 modules. To enter the advanced flight database for Grade 6, Sooongsoongyi needs you to bypass a complex long-wave decryption scramble sentence!",
+                ko: {
+                    title: "🔒 [등급 관문 2/3] 6학년 하이패스 암호화 장벽",
+                    text: "놀라운 학습 비행입니다, 캡틴! 5학년 과정을 모두 해제하셨습니다. 이제 최고 학년 등급인 6학년 파일 데이터에 들어가기 위해 고주파 복잡 단어 조합 패킷을 풀어야 합니다."
+                },
+                choices: [
+                    { 
+                        text: "📡 Engage Terminal Core Decryption", 
+                        ko: "📡 코어 해독 장치 즉각 실행",
+                        next: "trigger_m2_game" 
+                    }
+                ]
+            },
+            trigger_m2_game: {
+                title: "🛰️ High-Frequency Packet Reassembly",
+                text: "Connecting decryptor... Solve the scrambled English phrase safely to authorize Grade 6 systems!",
+                ko: {
+                    title: "🛰️ 초고속 데이터 회로 정밀 디코딩",
+                    text: "해독 장치 작동 중... 문장을 알맞게 연결하여 6학년 비행 시스템의 인가를 받으세요!"
+                },
+                onEnter: () => {
+                    triggerMilestoneDecryption("I want to be a pilot .", "node_15_health_sick", "Decrypt Flight Officer Registry", "Connect the blocks to write: 'I want to be a pilot.'");
+                },
+                choices: []
+            },
+
+            // ================== GRADE 6 SYLLABUS ==================
+            node_15_health_sick: {
+                title: "🔴 [Mission 15/20] Quarantine Health Check (Grade 6)",
+                text: "We have reached Grade 6 airspace! Suddenly, Sooongsoongyi (🐒) starts sneezing very loudly! Soongyi asks what is wrong. How does Sooongsoongyi explain his cold?",
+                ko: {
+                    title: "🔴 [미션 15/20] 우주 위생 비상 상태 (6학년)",
+                    text: "6학년 영공에 진입했습니다! 그런데 갑자기 숭숭이(🐒)가 연달아 우렁차게 재채기를 터뜨리기 시작하네요! 걱정스레 쳐다보는 숭이(🐵)에게 숭숭이가 아픈 감기 상태를 어떻게 말할까요?"
+                },
+                choices: [
+                    { 
+                        text: "🐒 'I have a cold.' (A)", 
+                        ko: "🐒 '나 감기에 호되게 걸렸어.' (A)",
+                        next: "node_16_grade", 
+                        stats: { energy: 10 } 
+                    },
+                    { 
+                        text: "🐵 'I am red and yellow.' (B)", 
+                        ko: "🐵 '나는 알록달록 빨갛고 노란색이야.' (B)",
+                        next: "node_16_grade", 
+                        isWrong: true,
+                        stats: { energy: -15, hull: -10 } 
+                    },
+                    {
+                        text: "👽 'My cold is very long.' (C)",
+                        ko: "👽 '내 감기는 몸길이가 아주 길어.' (C)",
+                        next: "node_16_grade",
+                        isWrong: true,
+                        stats: { energy: -10, hull: -15 }
+                    }
+                ]
+            },
+            node_16_grade: {
+                title: "🔴 [Mission 16/20] Registering for Martian School (Grade 6)",
+                text: "To license our crew with planetary flight authorities, we must log our education rank. The database console asks: 'What grade are you in?'",
+                ko: {
+                    title: "🔴 [미션 16/20] 우주 아카데미 학년 등록 (6학년)",
+                    text: "우주 연합 조종 면허를 획득하기 위해 대원들의 학력을 시스템에 기록해야 합니다. 전산 화면에 '너는 몇 학년에 재학 중이니 (What grade are you in?)'라고 뜹니다."
+                },
+                choices: [
+                    { 
+                        text: "🐵 'I'm in the sixth grade.' (A)", 
+                        ko: "🐵 '나는 6학년에 재학 중이야.' (A)",
+                        next: "node_17_birthday", 
+                        stats: { energy: 10 } 
+                    },
+                    { 
+                        text: "🐒 'I'm twelve years long.' (B)", 
+                        ko: "🐒 '나는 몸길이가 12년이야.' (B)",
+                        next: "node_17_birthday", 
+                        isWrong: true,
+                        stats: { energy: -15, hull: -10 } 
+                    },
+                    {
+                        text: "👽 'I am in the apple class.' (C)",
+                        ko: "👽 '나는 사과 반에 들어가 있어.' (C)",
+                        next: "node_17_birthday",
+                        isWrong: true,
+                        stats: { energy: -10, hull: -15 }
+                    }
+                ]
+            },
+            node_17_birthday: {
+                title: "🔴 [Mission 17/20] Igniting the Birthday Generator (Grade 6)",
+                text: "The main ignition computer asks for our captain profile verification question to confirm security: 'When is your birthday?'",
+                ko: {
+                    title: "🔴 [미션 17/20] 비행 보안 생일 암호화 코드 (6학년)",
+                    text: "중앙 통제실 엔진 시동을 가동하려면 계정의 소유자 확인 질문에 응답해야 합니다. 보안 화면에 나타납니다. '당신의 생일은 언제입니까 (When is your birthday?)'"
+                },
+                choices: [
+                    { 
+                        text: "🐵 'It's on June second.' (A)", 
+                        ko: "🐵 '제 생일은 6월 2일입니다.' (A)",
+                        next: "node_18_pilot_dream", 
+                        stats: { energy: 15 } 
+                    },
+                    { 
+                        text: "🐒 'It is fine, thank you.' (B)", 
+                        ko: "🐒 '그건 아주 괜찮아요, 감사합니다.' (B)",
+                        next: "node_18_pilot_dream", 
+                        isWrong: true,
+                        stats: { energy: -15, hull: -10 } 
+                    },
+                    {
+                        text: "👽 'My birthday is tomorrow yesterday.' (C)",
+                        ko: "👽 '제 생일은 내일 어제입니다.' (C)",
+                        next: "node_18_pilot_dream",
+                        isWrong: true,
+                        stats: { energy: -10, hull: -15 }
+                    }
+                ]
+            },
+            node_18_pilot_dream: {
+                title: "🔴 [Mission 18/20] Aspirations for Future (Grade 6)",
+                text: "To unlock the automatic autopilot, the system asks for your future career ambition: 'What do you want to be?'",
+                ko: {
+                    title: "🔴 [미션 18/20] 우주 미래 장래희망 서약 (6학년)",
+                    text: "지구행 고속 비행 오토파일럿 장치를 개방하려면 대원의 진로 포부를 선언해야 합니다. 기계가 묻습니다. '당신은 나중에 무엇이 되고 싶습니까 (What do you want to be?)'"
+                },
+                choices: [
+                    { 
+                        text: "🐒 'I want to be a pilot.' (A)", 
+                        ko: "🐒 '나는 훌륭한 비행사가 되고 싶어.' (A)",
+                        next: "node_19_why_happy", 
+                        stats: { energy: 20 } 
+                    },
+                    { 
+                        text: "🐵 'I want to eat apples.' (B)", 
+                        ko: "🐵 '나는 사과나 엄청 우적우적 씹어 먹고 싶어.' (B)",
+                        next: "node_19_why_happy", 
+                        isWrong: true,
+                        stats: { energy: -20, hull: -10 } 
+                    },
+                    {
+                        text: "👽 'I want to be a computer table.' (C)",
+                        ko: "👽 '나는 멋진 컴퓨터 책상이 되고 싶어.' (C)",
+                        next: "node_19_why_happy",
+                        isWrong: true,
+                        stats: { energy: -10, hull: -20 }
+                    }
+                ]
+            },
+            node_19_why_happy: {
+                title: "🔴 [Mission 19/20] Emotional Core Stabilization (Grade 6)",
+                text: "The cockpit control screens turn a cozy, warm blue. Soongyi (🐵) is smiling brightly at the safe environment. He asks you: 'Why are you happy?'",
+                ko: {
+                    title: "🔴 [미션 19/20] 감정 코어 감응 분석 (6학년)",
+                    text: "비행 조종실의 주요 인터페이스가 마침내 아늑하고 완벽한 하늘빛 푸른색으로 빛납니다. 숭이(🐵)가 기쁜 미소로 물어옵니다. '너는 왜 이렇게 기뻐하는 거야 (Why are you happy?)'"
+                },
+                choices: [
+                    { 
+                        text: "🐵 'Because we saved Mars!' (A)", 
+                        ko: "🐵 '왜냐하면 우리가 힘을 모아 화성을 구했으니까!' (A)",
+                        next: "node_20_how_can_i_get", 
+                        stats: { hull: 15 } 
+                    },
+                    { 
+                        text: "🐒 'Because my hammer is cold.' (B)", 
+                        ko: "🐒 '왜냐하면 내 망치가 꽁꽁 얼 만큼 차가우니까.' (B)",
+                        next: "node_20_how_can_i_get", 
+                        isWrong: true,
+                        stats: { energy: -15, hull: -10 } 
+                    },
+                    {
+                        text: "👽 'Because the floor is angry.' (C)",
+                        ko: "👽 '왜냐하면 바닥 바닥이 몹시 화가 났기 때문이야.' (C)",
+                        next: "node_20_how_can_i_get",
+                        isWrong: true,
+                        stats: { energy: -10, hull: -15 }
+                    }
+                ]
+            },
+            node_20_how_can_i_get: {
+                title: "🔴 [Mission 20/20] Reaching the Ancient Museum (Grade 6)",
+                text: "This is it, Captain! The final docking warp portal is located inside the grand Ancient Martian Relic Museum. How do you ask the computer for direct routing coordinates to get there?",
+                ko: {
+                    title: "🔴 [미션 20/20] 마침내 고대 유물관 도착 (6학년)",
+                    text: "이곳이 종착지입니다! 고대의 영광을 품은 대형 화성 유물 박물관 지하에 핵심 차원 포탈이 열립니다. 박물관 입구까지 가기 위해 인공지능에게 길을 어떻게 물어볼까요?"
+                },
+                choices: [
+                    { 
+                        text: "🐵 'How can I get to the museum?' (A)", 
+                        ko: "🐵 '박물관에는 어떻게 가나요?' (A)",
+                        next: "milestone_3_trigger", 
+                        stats: { energy: 30 } 
+                    },
+                    { 
+                        text: "🐒 'Why is the museum so tall?' (B)", 
+                        ko: "🐒 '박물관은 왜 이렇게 키가 커요?' (B)",
+                        next: "milestone_3_trigger", 
+                        isWrong: true,
+                        stats: { energy: -20, hull: -15 } 
+                    },
+                    {
+                        text: "👽 'Who made the museum happy?' (C)",
+                        ko: "👽 '누가 박물관을 저렇게 기분 좋게 만들었나요?' (C)",
+                        next: "milestone_3_trigger",
+                        isWrong: true,
+                        stats: { energy: -15, hull: -20 }
+                    }
+                ]
+            },
+
+            // ================== GRADE 6 TO ENDING MILESTONE SYSTEM ==================
+            milestone_3_trigger: {
+                title: "🔒 [Milestone 3/3] Final Core Activation Firewall",
+                text: "Spectacular! All 20 missions are complete! To initialize the planet-wide terraforming matrix, Sooongsoongyi (🐒) needs your assistance to de-scramble the master planetary control cipher phrase!",
+                ko: {
+                    title: "🔒 [등급 관문 3/3] 행성 개조 코어 최종 디코딩",
+                    text: "완벽합니다! 모든 미션을 완수하셨습니다. 황폐한 붉은 화성을 신비로운 녹색 파라다이스로 개조할 장치를 최종 점화하기 위해 마지막 데이터 암호 문장을 완성해 보아 주세요!"
+                },
+                choices: [
+                    { 
+                        text: "🌌 Trigger Master Matrix Ignition", 
+                        ko: "🌌 우주 행성 코어 최종 활성화 점화",
+                        next: "trigger_m3_game" 
+                    }
+                ]
+            },
+            trigger_m3_game: {
+                title: "🛰️ Master Control Decryption Matrix",
+                text: "Opening master bypass core... Arrange the final high-grade English sentence safely to complete your epic space mission!",
+                ko: {
+                    title: "🛰️ 최상위 메인 컴퓨터 파이널 암호 해독",
+                    text: "최종 우주 기어 잠금 해제 중... 6학년 핵심 문장을 완성하여 영광스러운 대단원의 막을 내리세요!"
+                },
+                onEnter: () => {
+                    triggerMilestoneDecryption("How can I get to the museum ?", "route_ending_decider", "Martian Planetary Ignition!", "Complete the core sentence: 'How can I get to the museum?'");
+                },
+                choices: []
+            },
+
+            route_ending_decider: {
+                title: "📡 Core Rerouting Database Matrix",
+                text: "The main processing core is grading your performance parameters...",
+                ko: {
+                    title: "📡 메인 제어반 성적 파라미터 판독 중",
+                    text: "항법 컴퓨터가 비행 훈련 중 발생한 오류 횟수를 계산하여 최종 결과를 분석하고 있습니다..."
+                },
+                onEnter: () => {
+                    setTimeout(() => {
+                        // Strict Grading System:
+                        // 0 Mistakes overall AND solved perfect bonus -> ending_ascension
+                        // 1 or 2 mistakes -> ending_rescue_hope (Neutral)
+                        // 3 or more mistakes -> ending_doom (Already triggered, but double checked here)
+                        if (gameState.wrongAnswers === 0) {
+                            changeStoryNode('bonus_mission_node'); 
+                        } else if (gameState.wrongAnswers >= 1 && gameState.wrongAnswers <= 2) {
+                            changeStoryNode('ending_rescue_hope');
+                        } else {
+                            changeStoryNode('ending_doom');
+                        }
+                    }, 1200);
+                },
+                choices: []
+            },
+
+            // ================== BONUS MISSION NODE ==================
+            bonus_mission_node: {
+                title: "⚡ [BONUS MISSION] Ultimate Primate Riddle (0 Mistakes Perfect Route)",
+                text: "PHENOMENAL WORK! You answered all 20 main cockpit missions perfectly with 0 mistakes!\n\nTo unlock the final tropical terraforming protocols, the Ancient Mars Robot demands the answer to the legendary linguistic puzzle:\n\n'What is the longest official word in the English dictionary?'\n\nType the exact word in the control input panel below to activate the core!",
+                ko: {
+                    title: "⚡ [보너스 미션] 고대 로봇의 마지막 언어 수수께끼",
+                    text: "놀랍습니다! 단 하나의 실수도 없이 20개의 모든 메인 미션을 성공하셨습니다!\n\n하지만 행성 전체를 화려한 야자수 낙원으로 개조하기 위해서는 화성 고대 로봇이 출제하는 마지막 언어의 벽을 넘어야 합니다:\n\n'영어 사전에서 가장 긴 공식 단어는 무엇일까요?'\n\n아래의 제어 입력창에 정확한 영단어를 기입하여 코어를 가동하세요!"
+                },
+                choices: [] // Handled via special custom input layout render
+            },
+
+            // ================== ENDING OUTCOMES ==================
+            ending_ascension: {
+                title: "🏆 [VICTORY ENDING: The Great Primate Tropical Paradise]",
+                text: "YOU DID IT! YOUR ENGLISH SKILLS ARE ABSOLUTELY OUT OF THIS WORLD! 🚀🪐 (0 Mistakes + Bonus Question Solved!)\n\nJito (지토) is so incredibly happy with your flawless grammar that he starts an epic, planet-wide breakdance competition to celebrate! Sooongsoongyi (🐒) grabs a plasma wrench and holds it like a sparkling gold microphone, while Soongyi (🐵) drops massive retro-synthesizer hip-hop beats directly from his repaired communication console!\n\nEven the giant Martian robotic centipede joins the party, balancing a colossal sparkling disco ball on its forehead antenna! As the golden alien relic slowly unscrews itself, it releases a super-concentrated wave of tropical humidity. Right before your eyes, the dry red Martian desert transforms into a luxury tropical paradise!\n\nAcres of giant palm trees, crystalline swimming pools, and organic banana plantations burst out of the red Martian dust. The cold, howling wind immediately changes into a warm, cozy summer ocean breeze. Jito gets on stage and starts leading the monkeys in his classic, ultra-nostalgic textbook tunes:\n\n'Who is he? He is my father! Yes he is!'\n'What color is it? It is green! Oh, it is blue!'\n\nYou are officially crowned the Grand Emperor of Galactic English! Everyone lives happily, healthily, and incredibly hilariously ever after on the green sands of Mars!",
+                ko: {
+                    title: "🏆 [완벽 성공 엔딩: 화성 우주 원숭이들의 열대 디스코 파라다이스]",
+                    text: "당신이 해냈습니다! 한 번의 실수도 없이 보너스 문제까지 완벽하게 맞추셨습니다! 당신의 완벽한 영어 실력은 정말 우주 최강입니다! 🚀🪐\n\n지토(지토)는 당신의 훌륭한 문법에 큰 감동을 받아 온 행성에 디스코 볼을 켜고 축하 축제를 벌입니다! 숭숭이(🐒)는 황금 전력 스패너를 들고 마이크처럼 노래하며 춤추기 시작하고, 남자친구인 숭이(🐵)는 신나게 고주파 신호기로 힙합 비트를 넣습니다!\n\n최종 암호가 해제되자 화성의 붉은 먼지들이 한순간에 울창하고 따뜻한 초록빛 바나나 숲이자 최고급 호텔 리조트로 변해 버렸습니다! 대원들은 선글라스를 끼고 야자수 밑에서 바나나 셰이크를 홀짝이고 있고, 지구 구조선 선장님마저 감동의 눈물을 흘립니다!"
+                },
+                onEnter: () => { endTheGame('success', 'mozartHiphop'); },
+                choices: []
+            },
+
+            ending_rescue_hope: {
+                title: "🎧 [NEUTRAL ENDING: Still D.R.E. Space Odyssey]",
+                text: "CONGRATULATIONS! YOU COMPLETED YOUR MISSION! 📡🌍 (1~2 Mistakes Made or Failed Bonus Riddle)\n\nJito (지토) carefully grades your academy homework, scratches his green alien head, and smiles: 'Not bad at all! In fact, your English is quite good! So-so!' He pulls out his saucer's high-tech orbital laser pointer and writes a gigantic glowing 'A+' on the dusty canyon of Mars!\n\nWith a massive 'KABOOM!', the human rescue spaceship 'Odyssey Express' lands safely near the dome. The human captain steps out and exclaims: 'Wait... are these space monkeys actually smarter than my entire co-pilot flight crew?'\n\nBecause a few questions took a little bit longer or were missed, the relic doesn't have quite enough power to convert the entire planet of Mars into a tropical rainforest. However, Jito kindly uses his alien technology to wrap the entire Mars Primate Academy into a giant, self-sustaining bubble of warm oxygen! Jito, Sooongsoongyi, and Soongyi pack their bags, pile their giant supply of space bananas into the cargo hold, and climb on board the rescue vessel.\n\nNow, they are zoom-zooming through the Milky Way galaxy back to Earth, enjoying Dr. Dre's legendary Still D.R.E. Instrumental playlist looping flawlessly in the pilot speaker!",
+                ko: {
+                    title: "🎧 [중립 엔딩: 지구행 특급 열차와 Still D.R.E. 우주 비트]",
+                    text: "축하합니다! 비록 1~2번의 실수가 있었거나 보너스 문제를 아쉽게 틀렸지만 안전 권역 안으로 임무를 마쳤습니다! 📡🌍\n\n지토는 우주 야광 레이저 펜으로 화성 계곡에 거대한 'A+' 학점을 새겨 주었습니다! 거대한 우주선이 돔 근처에 안전하게 도착하고, 대원들은 소중한 우주 바나나들을 카고에 가득 실은 채 무사히 지구로 이송됩니다.\n\n비행하는 내내 우주 조종석 스피커에서는 힙합의 명작 Dr. Dre의 Still D.R.E. Instrumental 음악이 무한히 재생되며 모두가 고개를 흔들며 신나게 지구로 돌아갑니다!"
+                },
+                onEnter: () => { endTheGame('neutral', 'stillDre'); },
+                choices: []
+            },
+
+            ending_doom: {
+                title: "💀 [FAILURE ENDING: Zito's English Tutoring Abduction]",
+                text: "OH NO! THE POWER CORE OF THE ARES COCKPIT HAS UTTERLY SHUT DOWN! ❄️💤 (3+ Mistakes Made)\n\nBecause you made too many English grammar mistakes, the environmental heaters shut down with a very sad 'bloop' sound. The cozy red glow of the Mars Base dims into a freezing, dark, shadowy purple.\n\nZito (지토) slowly walks out from the dark, looking disappointed in your English scores. 'Oh! Your grammar needs private lessons!' Zito grabs Soongyi (🐵) the radio operator with a glowing purple lasso! Soongyi screams 'OOH OOH! HELP ME!' but Zito drags him straight into his green flying saucer!\n\nZito sits Soongyi down at a small cosmic desk, puts on giant reading glasses, and forces poor Soongyi to study English textbook dialogue 24 hours a day under a flickering neon light! Jito waves his stick pointing at page 45:\n\n'Look! Listen and repeat after me! How are you? I'm fine, thank you!'\n\nBack on Mars, Sooongsoongyi (🐒) sits completely alone in the freezing, dark cockpit, hugging her space hammer and crying sad, heavy tears because her beloved boyfriend Soongyi is abducted and she has no one left to practice English with!\n\nPress the button below to restart your training, rescue Soongyi, and try again!",
+                ko: {
+                    title: "💀 [실패 엔딩: 외계인 지토의 지옥의 영어 과외 납치]",
+                    text: "안타깝습니다! 3번 이상의 영어 오역으로 인해 원자로 냉각 난방 장치가 완전히 꺼지고 기지가 빙결실처럼 차가워집니다! ❄️💤\n\n실망한 외계인 지토(지토)가 보랏빛 포획 로프를 던져 무전 통신원 숭이(🐵)를 꽁꽁 묶어 자신의 UFO에 강제로 실어 납치해 버립니다!\n\n지토는 숭이를 어두운 우주 스터디룸에 강제로 앉혀놓고 거대 돋보기안경을 쓴 채, 하루 24시간 동안 쉬지 않고 교과서 생활 영어를 소리 내어 읽게 만드는 '지옥의 1:1 영어 지상 과외 고문'을 시작합니다!\n\n화성에 홀로 남겨진 여자친구 숭숭이(🐒)는 차갑게 식어가는 스패너를 안고 사랑하는 숭이를 그리워하며 엉엉 슬피 울부짖고 있습니다. 어서 영어 실력을 다듬고 재시도하여 숭이를 구출해 주세요!"
+                },
+                onEnter: () => { endTheGame('failure', 'sadViolin'); },
+                choices: []
+            },
+
+            ending_jito_escape_doom: {
+                title: "👾 [TIMEOUT FAILURE: Zito's Snub Abduction]",
+                text: "OH THE ABSOLUTE COSMIC TRAGEDY! You did not click Jito (지토) in time! 👾💨\n\nJito peeked through your scanner screen, saw that your fingers were too slow, and giggled in his autotuned textbook voice. He instantly targeted Soongyi (🐵) and sucked him into his private tutoring flying saucer!\n\nSoongyi is now locked in Zito's deep-space classroom, forced to translate endless dialogue while Sooongsoongyi (🐒) cries alone on the dark Martian sands because her beloved boyfriend was taken.\n\nPress the button below to rescue him!",
+                ko: {
+                    title: "👾 [시간 초과 실패: 지토의 기습 납치와 지옥의 과외]",
+                    text: "지토가 나타났음에도 20초 이내에 클릭하여 방어하지 못해 기지의 격벽이 무력화되었습니다! 👾💨\n\n지토는 신나게 춤을 추며 통신원 숭이(🐵)를 보랏빛 수송 광선으로 납치해 깊은 우주 영어 학원으로 끌고 갔습니다. 숭이는 쉬지 않고 'How are you?'를 읊어야 하는 과외 지옥에 빠졌고, 남겨진 숭숭이(🐒)는 스캐너 옆에서 사랑하는 남자친구를 그리워하며 엉엉 울고 있습니다. 어서 재시작 버튼을 눌러 다시 숭이를 지토로부터 구출하세요!"
+                },
+                onEnter: () => { endTheGame('failure', 'sadViolin'); },
+                choices: []
+            }
+        };
+
+        function triggerJitoEscapeTimeout() {
+            clearInterval(gameState.jitoInterval);
+            gameState.jitoActive = false;
+            document.getElementById('jito-hud').classList.remove('opacity-100', 'translate-y-0');
+            document.getElementById('jito-hud').classList.add('opacity-0', 'translate-y-[-10px]');
+            AudioCtrl.stopJitoAlarm();
+            addMistake(1);
+            changeStoryNode('ending_jito_escape_doom');
+        }
+
+        // Mistake incrementer with instant 3-mistake failure check
+        function addMistake(amount = 1) {
+            gameState.wrongAnswers += amount;
+            document.getElementById('wrong-count-hud').innerText = gameState.wrongAnswers;
+            if (gameState.wrongAnswers >= 3) {
+                showToast(`🚨 CRITICAL MAIN CORE BREACH: 3 Mistakes Reached!`, 'critical');
+                changeStoryNode('ending_doom');
+                return true; // Instantly failed
+            }
+            return false;
+        }
+
+        function updateStatsBar() {
+            document.getElementById('stat-o2-text').innerText = `${gameState.stats.o2}%`;
+            document.getElementById('stat-o2-bar').style.width = `${gameState.stats.o2}%`;
+            toggleBarColor('stat-o2-bar', gameState.stats.o2);
+
+            document.getElementById('stat-hull-text').innerText = `${gameState.stats.hull}%`;
+            document.getElementById('stat-hull-bar').style.width = `${gameState.stats.hull}%`;
+            toggleBarColor('stat-hull-bar', gameState.stats.hull);
+
+            document.getElementById('stat-energy-text').innerText = `${gameState.stats.energy}%`;
+            document.getElementById('stat-energy-bar').style.width = `${gameState.stats.energy}%`;
+            toggleBarColor('stat-energy-bar', gameState.stats.energy);
+
+            if (gameState.stats.hull <= 0 || gameState.stats.energy <= 0) {
+                triggerCrisisGameOver();
+            }
+        }
+
+        function toggleBarColor(barId, val) {
+            const bar = document.getElementById(barId);
+            bar.className = "h-full rounded-full transition-all duration-500 ";
+            if (val <= 25) {
+                bar.classList.add('bg-red-500', 'shadow-[0_0_12px_rgba(239,68,68,0.7)]');
+            } else if (val <= 50) {
+                bar.classList.add('bg-amber-500', 'shadow-[0_0_12px_rgba(245,158,11,0.6)]');
+            } else {
+                if (barId === 'stat-o2-bar') bar.classList.add('bg-sky-500', 'shadow-[0_0_12px_rgba(56,189,248,0.6)]');
+                if (barId === 'stat-hull-bar') bar.classList.add('bg-emerald-500', 'shadow-[0_0_12px_rgba(16,185,129,0.6)]');
+                if (barId === 'stat-energy-bar') bar.classList.add('bg-amber-500', 'shadow-[0_0_12px_rgba(245,158,11,0.6)]');
+            }
+        }
+
+        function modifyStats(delta) {
+            for (let key in delta) {
+                if (key === 'o2' && delta[key] < 0) {
+                    continue; // Strict Rule Protection: Oxygen bar must NEVER decrease!
+                }
+                if (gameState.stats.hasOwnProperty(key)) {
+                    gameState.stats[key] = Math.max(0, Math.min(100, gameState.stats[key] + delta[key]));
+                }
+            }
+            updateStatsBar();
+        }
+
+        // Refreshes story panel contents instantly (used for lag-free Translation Switch)
+        function refreshCurrentNodeDisplay() {
+            const node = STORY_TREE[gameState.currentNode];
+            if (!node) return;
+
+            const viewport = document.getElementById('story-viewport');
+            const headingTextEnglish = node.title;
+            const headingTextKorean = node.ko ? node.ko.title : "";
+            
+            const narrativeEnglish = node.text;
+            const narrativeKorean = node.ko ? node.ko.text : "";
+
+            let titleHTML = `<h3 class="text-xl md:text-2xl font-orbitron font-black text-slate-100 neon-text-orange">${headingTextEnglish}</h3>`;
+            if (gameState.translateMode && headingTextKorean) {
+                titleHTML += `<h4 class="text-sm md:text-base font-sans font-bold text-purple-300/90 mt-1">🇰🇷 ${headingTextKorean}</h4>`;
+            }
+
+            viewport.innerHTML = `
+                <div class="border-b border-orange-500/10 pb-4 mb-6 flex justify-between items-start gap-4">
+                    <div>
+                        <span class="text-xs font-mono-sci text-orange-500/70 tracking-widest uppercase block font-bold">COCKPIT DIALOGUE SCREEN</span>
+                        ${titleHTML}
+                    </div>
+                    <button class="bg-orange-500/20 hover:bg-orange-500 text-orange-400 hover:text-slate-950 p-2.5 rounded-xl border border-orange-500/50 transition-all font-bold shrink-0 text-lg cursor-pointer animate-pulse" 
+                            title="Speak Dialogue" 
+                            onclick="speakEnglishText(STORY_TREE['${gameState.currentNode}'].text)">
+                        🔊
+                    </button>
+                </div>
+                <div id="typed-narrative-en" class="text-slate-200 text-sm md:text-base leading-relaxed whitespace-pre-wrap font-sans font-semibold">
+                    ${narrativeEnglish}
+                </div>
+                <div id="typed-narrative-ko" class="text-purple-300/80 text-xs md:text-sm leading-relaxed whitespace-pre-wrap font-sans mt-3 border-t border-slate-900/50 pt-3 ${gameState.translateMode ? '' : 'hidden'}">
+                    ${gameState.translateMode && narrativeKorean ? '🇰🇷 ' + narrativeKorean : ''}
+                </div>
+            `;
+
+            renderChoices(gameState.currentNode);
+        }
+
+        function changeStoryNode(nodeKey) {
+            const node = STORY_TREE[nodeKey];
+            if (!node) return;
+
+            // Clear any active typing interval timers to prevent text overlap bugs
+            if (typingInterval) {
+                clearInterval(typingInterval);
+                typingInterval = null;
+            }
+
+            gameState.currentNode = nodeKey;
+            appendTerminalLog(`📂 TELEMETRY FEED LOADING: ${node.title.toUpperCase()}`, true);
+
+            // Execute dynamic triggers (e.g. alien spawns)
+            if (node.onEnter) {
+                node.onEnter();
+            }
+
+            const viewport = document.getElementById('story-viewport');
+            
+            // English is ALWAYS displayed first/top. Korean is optional/bottom.
+            const headingTextEnglish = node.title;
+            const headingTextKorean = node.ko ? node.ko.title : "";
+            
+            const narrativeEnglish = node.text;
+            const narrativeKorean = node.ko ? node.ko.text : "";
+
+            let titleHTML = `<h3 class="text-xl md:text-2xl font-orbitron font-black text-slate-100 neon-text-orange">${headingTextEnglish}</h3>`;
+            if (gameState.translateMode && headingTextKorean) {
+                titleHTML += `<h4 class="text-sm md:text-base font-sans font-bold text-purple-300/90 mt-1">🇰🇷 ${headingTextKorean}</h4>`;
+            }
+
+            viewport.innerHTML = `
+                <div class="border-b border-orange-500/10 pb-4 mb-6 animate-fade-in flex justify-between items-start gap-4">
+                    <div>
+                        <span class="text-xs font-mono-sci text-orange-500/70 tracking-widest uppercase block font-bold">COCKPIT DIALOGUE SCREEN</span>
+                        ${titleHTML}
+                    </div>
+                    <button class="bg-orange-500/20 hover:bg-orange-500 text-orange-400 hover:text-slate-950 p-2.5 rounded-xl border border-orange-500/50 transition-all font-bold shrink-0 text-lg cursor-pointer animate-pulse" 
+                            title="Speak Dialogue" 
+                            onclick="speakEnglishText(STORY_TREE['${nodeKey}'].text)">
+                        🔊
+                    </button>
+                </div>
+                <div id="typed-narrative-en" class="text-slate-200 text-sm md:text-base leading-relaxed whitespace-pre-wrap font-sans font-semibold">
+                    <!-- English text auto-populates here -->
+                </div>
+                <div id="typed-narrative-ko" class="text-purple-300/80 text-xs md:text-sm leading-relaxed whitespace-pre-wrap font-sans mt-3 border-t border-slate-900/50 pt-3 hidden">
+                    <!-- Korean translation helper here -->
+                </div>
+            `;
+
+            let charIndex = 0;
+            const typedEN = document.getElementById('typed-narrative-en');
+            const typedKO = document.getElementById('typed-narrative-ko');
+            
+            if (gameState.translateMode && narrativeKorean) {
+                typedKO.classList.remove('hidden');
+            }
+
+            typingInterval = setInterval(() => {
+                if (charIndex < narrativeEnglish.length) {
+                    typedEN.textContent += narrativeEnglish.charAt(charIndex);
+                    charIndex++;
+                    
+                    if (charIndex % 3 === 0) {
+                        AudioCtrl.playClick();
+                    }
+                    
+                    const storyPanel = document.getElementById('story-panel');
+                    storyPanel.scrollTop = storyPanel.scrollHeight;
+                } else {
+                    clearInterval(typingInterval);
+                    typingInterval = null;
+                    
+                    // Show Korean translation after English finishes typing
+                    if (gameState.translateMode && narrativeKorean) {
+                        typedKO.textContent = `🇰🇷 ${narrativeKorean}`;
+                    }
+                    
+                    renderChoices(nodeKey);
+                    triggerSystemLogsChatter();
+                }
+            }, 6); 
+        }
+
+        function renderChoices(nodeKey) {
+            const node = STORY_TREE[nodeKey];
+            const container = document.getElementById('choices-container');
+            container.innerHTML = '';
+
+            // Handle endings restart rendering
+            if (nodeKey.startsWith('ending_')) {
+                let endingType = 'failure';
+                if (nodeKey === 'ending_ascension') endingType = 'success';
+                if (nodeKey === 'ending_rescue_hope') endingType = 'neutral';
+                
+                container.innerHTML = `
+                    <div class="p-6 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col items-center gap-4 text-center mt-6 animate-slide-up">
+                        <h4 class="font-orbitron font-bold text-lg ${endingType === 'success' ? 'text-purple-400' : (endingType === 'neutral' ? 'text-sky-400' : 'text-red-400')}">
+                            ${endingType === 'success' ? '🏆 PERFECT COGNITIVE SUCCESS' : (endingType === 'neutral' ? '🎧 NEUTRAL Evaluation Completed' : '💀 SYSTEM OVERLOAD TERMINATED')}
+                        </h4>
+                        <button onclick="resetGame(true)" class="px-8 py-4 bg-orange-950 hover:bg-orange-500 hover:text-slate-950 text-orange-400 font-bold font-orbitron border-2 border-orange-500 rounded-xl transition-all shadow-[0_0_20px_rgba(249,115,22,0.4)] text-base cursor-pointer">
+                            Restart Training Mission
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            // Handle Special Input Layout for Bonus Riddle
+            if (nodeKey === 'bonus_mission_node') {
+                container.innerHTML = `
+                    <div class="p-6 bg-slate-900 border-2 border-orange-500/30 rounded-2xl flex flex-col gap-4 animate-slide-up">
+                        <label class="text-orange-400 font-mono-sci text-xs font-bold uppercase tracking-wider block">Core Decryption Input</label>
+                        <input type="text" id="bonus-word-input" placeholder="Type the longest word here..." class="w-full bg-[#050308] border border-orange-500/50 rounded-xl p-4 text-slate-100 font-mono-sci tracking-widest text-base focus:outline-none focus:border-orange-500 focus:shadow-[0_0_15px_rgba(249,115,22,0.4)] transition-all uppercase" autofocus autocomplete="off" />
+                        
+                        <div class="flex flex-wrap gap-3 justify-end mt-2">
+                            <button id="bonus-submit-btn" class="px-6 py-3 bg-orange-950/60 hover:bg-orange-500 hover:text-slate-950 text-orange-400 border border-orange-500 rounded-xl transition-all font-orbitron font-bold text-sm cursor-pointer">
+                                🚀 INITIALIZE IGNITION
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                const submitBtn = document.getElementById('bonus-submit-btn');
+                const inputField = document.getElementById('bonus-word-input');
+                
+                const processBonus = () => {
+                    const answer = inputField.value.trim().toLowerCase();
+                    if (['pneumonoultramicroscopicsilicovolcanoconiosis','pneumonoultramicroscopicsilicovolcanoconisis'].includes(answer)) {
+                        AudioCtrl.playSuccess();
+                        showToast("🔓 PERFECT CODE VALIDATED!", "success");
+                        changeStoryNode('ending_ascension');
+                    } else {
+                        AudioCtrl.playFailure();
+                        showToast("❌ DECRYPTION MISMATCH! Core signal destabilizing...", "error");
+                        appendTerminalLog("⚠️ DECIPHER FAILURE: The ancient code was incorrect. System falling back to secondary rescue orbits.", false);
+                        
+                        // Fail bonus = counts as 1 mistake to push them into neutral ending
+                        addMistake(1);
+                        setTimeout(() => {
+                            changeStoryNode('ending_rescue_hope');
+                        }, 1500);
+                    }
+                };
+
+                submitBtn.addEventListener('click', processBonus);
+                inputField.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        processBonus();
+                    }
+                });
+                return;
+            }
+
+            if (!node.choices || node.choices.length === 0) {
+                return;
+            }
+
+            // Scramble choices on rendering so correct position is randomized
+            const scrambledChoices = shuffleArray(node.choices);
+
+            scrambledChoices.forEach((choice) => {
+                const btn = document.createElement('div');
+                btn.className = `w-full p-4 md:p-5 rounded-2xl border-2 flex justify-between items-center transition-all duration-300 bg-slate-900/90 border-orange-500/30 text-slate-100 hover:bg-orange-950/20 hover:border-orange-500 hover:shadow-[0_0_20px_rgba(249,115,22,0.3)]`;
+
+                let choiceTextHTML = `<span class="font-bold leading-relaxed text-sm md:text-base">${choice.text}</span>`;
+                if (gameState.translateMode && choice.ko) {
+                    choiceTextHTML += `<span class="block text-xs text-purple-300 font-sans mt-0.5">🇰🇷 ${choice.ko}</span>`;
+                }
+
+                btn.innerHTML = `
+                    <div class="flex items-center gap-4 w-full justify-between">
+                        <div class="flex flex-col text-left">${choiceTextHTML}</div>
+                        <div class="flex gap-2 shrink-0 items-center">
+                            <button class="bg-purple-950/40 hover:bg-purple-900/80 text-purple-300 p-2 rounded-lg border border-purple-500/30 transition-all font-bold cursor-pointer text-sm btn-speak-tts">
+                                🔊
+                            </button>
+                            <button class="bg-orange-500/10 hover:bg-orange-500 text-orange-400 hover:text-slate-950 px-4 py-2 rounded-xl border border-orange-500/30 transition-all font-mono-sci text-xs font-bold cursor-pointer transition-all active:scale-95 btn-select">
+                                SELECT ➔
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                btn.querySelector('.btn-speak-tts').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    speakEnglishText(choice.text);
+                });
+
+                const clickHandler = () => {
+                    AudioCtrl.playClick();
+                    let didTriggerDoom = false;
+
+                    if (choice.isWrong) {
+                        // Triggers mistake increment & checks if immediate doom ending is reached
+                        didTriggerDoom = addMistake(1);
+                        if (didTriggerDoom) return; // Instantly aborted and loaded doom
+                        showToast(`⚠️ Incorrect Choice! Total mistakes: ${gameState.wrongAnswers}/3`, 'error');
+                    }
+
+                    if (choice.stats) {
+                        modifyStats(choice.stats);
+                    }
+
+                    // Directly progress with no retry states
+                    changeStoryNode(choice.next);
+                };
+
+                btn.querySelector('.btn-select').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    clickHandler();
+                });
+                btn.addEventListener('click', clickHandler);
+
+                container.appendChild(btn);
+            });
+        }
+
+        function triggerJitoSpawn() {
+            if (gameState.jitoActive) return;
+
+            gameState.jitoActive = true;
+            gameState.jitoTimer = 20;
+            
+            const boundaryWidth = document.getElementById('radar-canvas').width || 280;
+            gameState.jitoX = 50 + Math.random() * (boundaryWidth - 100);
+            gameState.jitoY = 50 + Math.random() * (boundaryWidth - 100);
+            gameState.jitoSpeedX = (Math.random() > 0.5 ? 1 : -1) * (1.2 + Math.random() * 1.0);
+            gameState.jitoSpeedY = (Math.random() > 0.5 ? 1 : -1) * (1.2 + Math.random() * 1.0);
+
+            const hud = document.getElementById('jito-hud');
+            hud.classList.remove('opacity-0', 'translate-y-[-10px]');
+            hud.classList.add('opacity-100', 'translate-y-0');
+            document.getElementById('jito-countdown').innerText = gameState.jitoTimer;
+            document.getElementById('jito-countdown').classList.remove('text-red-500', 'animate-pulse');
+
+            appendTerminalLog("🚨 RED HAZARD ALERT: RETRO WAVE IDENTIFIED WITHIN SCAN AREA. ALIEN REGISTRY: ZITO!", false);
+            showToast("👾 Retro Alien Jito has spawned on the Radar!", "critical");
+
+            AudioCtrl.startJitoAlarm();
+
+            clearInterval(gameState.jitoInterval);
+            gameState.jitoInterval = setInterval(() => {
+                gameState.jitoTimer--;
+                document.getElementById('jito-countdown').innerText = gameState.jitoTimer;
+
+                if (gameState.jitoTimer <= 5) {
+                    document.getElementById('jito-countdown').classList.add('text-red-500', 'animate-pulse');
+                    AudioCtrl.playClick();
+                }
+
+                if (gameState.jitoTimer <= 0) {
+                    triggerJitoEscapeTimeout();
+                }
+            }, 1000);
+        }
+
+        function captureJitoSuccess() {
+            clearInterval(gameState.jitoInterval);
+            gameState.jitoActive = false;
+            
+            const hud = document.getElementById('jito-hud');
+            hud.classList.remove('opacity-100', 'translate-y-0');
+            hud.classList.add('opacity-0', 'translate-y-[-10px]');
+            AudioCtrl.stopJitoAlarm();
+
+            AudioCtrl.playSuccess();
+            showToast("👽 JITO CAPTURED! 'I'm fine, thank you, and you?'", "success");
+            appendTerminalLog("👾 ZITO COGNITION BIOMETRIC SECURED: Alien Jito has resolved into co-pilot mode!", true);
+
+            modifyStats({ energy: 100, hull: 20 });
+        }
+
+        function startJitoRandomSpawnChecks() {
+            clearInterval(gameState.jitoSpawnCheckInterval);
+            gameState.jitoSpawnCheckInterval = setInterval(() => {
+                if (!gameState.jitoActive && gameState.currentNode !== 'intro_command' && !gameState.currentNode.startsWith('ending_')) {
+                    triggerJitoSpawn();
+                }
+            }, 20000); 
+        }
+
+        function triggerCrisisGameOver() {
+            clearInterval(gameState.jitoInterval);
+            clearInterval(gameState.jitoSpawnCheckInterval);
+            gameState.jitoActive = false;
+            document.getElementById('jito-hud').classList.add('opacity-0');
+            AudioCtrl.stopJitoAlarm();
+            AudioCtrl.playFailure();
+            changeStoryNode('ending_doom');
+        }
+
+        function endTheGame(endingType, musicToPlay) {
+            clearInterval(gameState.jitoInterval);
+            clearInterval(gameState.jitoSpawnCheckInterval);
+            gameState.jitoActive = false;
+            
+            const hud = document.getElementById('jito-hud');
+            hud.classList.remove('opacity-100', 'translate-y-0');
+            hud.classList.add('opacity-0', 'translate-y-[-10px]');
+            AudioCtrl.stopJitoAlarm();
+
+            // Stop main theme and play selected ending track
+            AudioCtrl.stopBGM();
+            AudioCtrl.playBGM(musicToPlay);
+
+            appendTerminalLog(`🛑 TERMINATED COCKPIT OPERATIONS. MISSION OUTCOME: ${endingType.toUpperCase()}`, endingType !== 'failure');
+            
+            const status1 = document.getElementById('crew-soongsoong-status');
+            const status2 = document.getElementById('crew-soong-status');
+
+            if (endingType === 'success') {
+                status1.innerText = "VICTORIOUS 🐒";
+                status1.className = "text-[11px] bg-purple-950 text-purple-300 border border-purple-500 px-2 py-1 rounded-lg font-mono-sci font-bold";
+                status2.innerText = "MASTER 🐵";
+                status2.className = "text-[11px] bg-purple-950 text-purple-300 border border-purple-500 px-2 py-1 rounded-lg font-mono-sci font-bold";
+            } else if (endingType === 'neutral') {
+                status1.innerText = "🎧 Still D.R.E.";
+                status1.className = "text-[11px] bg-sky-950 text-sky-400 border border-sky-500/50 px-2 py-1 rounded-lg font-mono-sci font-bold";
+                status2.innerText = "🎧 Still D.R.E.";
+                status2.className = "text-[11px] bg-sky-950 text-sky-400 border border-sky-500/50 px-2 py-1 rounded-lg font-mono-sci font-bold";
+            } else {
+                status1.innerText = "CRYING 😭🐒";
+                status1.className = "text-[11px] bg-red-950 text-red-400 border border-red-500/50 px-2 py-1 rounded-lg font-mono-sci font-bold animate-pulse";
+                status2.innerText = "ABDUCTED 🧠🐵";
+                status2.className = "text-[11px] bg-red-950 text-red-400 border border-red-500/50 px-2 py-1 rounded-lg font-mono-sci font-bold";
+            }
+        }
+
+        function scrambleSentence(sentenceStr) {
+            const words = sentenceStr.replace(/[.\?]/g, match => ` ${match}`).trim().split(/\s+/);
+            const scrambled = [...words];
+            
+            for (let i = scrambled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [scrambled[i], scrambled[j]] = [scrambled[j], scrambled[i]];
+            }
+            if (scrambled.join(' ') === words.join(' ') && words.length > 1) {
+                [scrambled[0], scrambled[1]] = [scrambled[1], scrambled[0]];
+            }
+            return { original: words, scrambled };
+        }
+
+        function triggerMilestoneDecryption(sentence, nextNodeSuccess, titleText, descText) {
+            AudioCtrl.playFailure();
+            showToast("🔒 Firewall Encryption Intercepted!", "critical");
+            
+            const data = scrambleSentence(sentence);
+            sentenceBypassState.correctOrder = data.original;
+            sentenceBypassState.userOrder = [];
+            sentenceBypassState.timer = 25;
+            sentenceBypassState.nextNodeSuccess = nextNodeSuccess;
+
+            document.getElementById('minigame-title').innerText = titleText;
+            document.getElementById('minigame-desc').innerText = descText;
+
+            document.getElementById('choices-container').classList.add('hidden');
+            document.getElementById('minigame-container').classList.remove('hidden');
+            document.getElementById('minigame-container').classList.add('flex');
+
+            renderScrambleBoard(data.scrambled);
+
+            clearInterval(sentenceBypassState.interval);
+            sentenceBypassState.interval = setInterval(() => {
+                sentenceBypassState.timer--;
+                document.getElementById('minigame-timer').innerText = `${sentenceBypassState.timer}s`;
+                
+                if (sentenceBypassState.timer <= 8) {
+                    document.getElementById('minigame-timer').classList.add('text-red-500', 'animate-pulse');
+                } else {
+                    document.getElementById('minigame-timer').classList.remove('text-red-500', 'animate-pulse');
+                }
+
+                if (sentenceBypassState.timer <= 0) {
+                    clearInterval(sentenceBypassState.interval);
+                    failSentenceBypass("Core Overheating Timeout!");
+                }
+            }, 1000);
+        }
+
+        function renderScrambleBoard(scrambledWords) {
+            const pool = document.getElementById('word-scramble-pool');
+            const answerContainer = document.getElementById('word-answer-slots');
+            
+            pool.innerHTML = '';
+            answerContainer.innerHTML = '';
+
+            scrambledWords.forEach(word => {
+                const wordBtn = document.createElement('button');
+                wordBtn.className = "px-4 py-2 bg-slate-900 hover:bg-orange-950 text-orange-400 font-extrabold text-sm border-2 border-orange-500/30 rounded-xl transition-all cursor-pointer active:scale-95 flex items-center gap-1.5";
+                
+                wordBtn.innerHTML = `
+                    <span>${word}</span>
+                    <span class="text-[10px] text-slate-500 hover:text-white" onclick="event.stopPropagation(); speakEnglishText('${word}')">🔊</span>
+                `;
+                
+                wordBtn.addEventListener('click', () => {
+                    AudioCtrl.playClick();
+                    sentenceBypassState.userOrder.push(word);
+                    wordBtn.disabled = true;
+                    wordBtn.classList.add('opacity-30', 'cursor-not-allowed');
+                    updateAnswerArea(scrambledWords);
+                });
+                pool.appendChild(wordBtn);
+            });
+        }
+
+        function updateAnswerArea(scrambledWords) {
+            const answerContainer = document.getElementById('word-answer-slots');
+            answerContainer.innerHTML = '';
+
+            sentenceBypassState.userOrder.forEach((word, index) => {
+                const chip = document.createElement('span');
+                chip.className = "px-4 py-2 bg-purple-950 text-purple-300 font-extrabold text-sm border-2 border-purple-500 rounded-xl cursor-pointer hover:bg-red-950/40 flex items-center gap-1.5";
+                chip.innerHTML = `
+                    <span>${word}</span>
+                    <span class="text-[10px] text-slate-400">&times;</span>
+                `;
+                
+                chip.addEventListener('click', () => {
+                    AudioCtrl.playClick();
+                    sentenceBypassState.userOrder.splice(index, 1);
+                    
+                    const poolButtons = document.getElementById('word-scramble-pool').children;
+                    for (let btn of poolButtons) {
+                        const btnSpan = btn.querySelector('span');
+                        if (btnSpan && btnSpan.innerText === word && btn.disabled) {
+                            btn.disabled = false;
+                            btn.classList.remove('opacity-30', 'cursor-not-allowed');
+                            break;
+                        }
+                    }
+                    updateAnswerArea(scrambledWords);
+                });
+
+                answerContainer.appendChild(chip);
+            });
+
+            if (sentenceBypassState.userOrder.length === sentenceBypassState.correctOrder.length) {
+                const matches = sentenceBypassState.userOrder.every((val, i) => val === sentenceBypassState.correctOrder[i]);
+                if (matches) {
+                    clearInterval(sentenceBypassState.interval);
+                    setTimeout(() => { successSentenceBypass(); }, 350);
+                } else {
+                    showToast("❌ Incorrect Sequence. Re-evaluating terminal layout!", "error");
+                    AudioCtrl.playFailure();
+                    
+                    // Increment mistakes count for mini-game failures too!
+                    gameState.wrongAnswers++;
+                    document.getElementById('wrong-count-hud').innerText = gameState.wrongAnswers;
+                    
+                    setTimeout(() => {
+                        sentenceBypassState.userOrder = [];
+                        const poolButtons = document.getElementById('word-scramble-pool').children;
+                        for (let btn of poolButtons) {
+                            btn.disabled = false;
+                            btn.classList.remove('opacity-30', 'cursor-not-allowed');
+                        }
+                        answerContainer.innerHTML = '';
+                    }, 1000);
+                }
+            }
+        }
+
+        function successSentenceBypass() {
+            AudioCtrl.playSuccess();
+            showToast("🔋 Mainframe Connection Established!", "success");
+            
+            modifyStats({ energy: 25 }); // Oxygen level is protected and cannot decrease or go beyond 100 easily
+            appendTerminalLog("⚡ HIGH TENSION PORTAL MATRIX ACTIVATED: Packet structure securely synchronized.", true);
+            
+            closeCircuitMiniGame();
+            changeStoryNode(sentenceBypassState.nextNodeSuccess);
+        }
+
+        function failSentenceBypass(reason) {
+            AudioCtrl.playFailure();
+            showToast(`🚨 Security Override Failed: ${reason}`, "critical");
+            
+            // Bypass skip adds an error
+            gameState.wrongAnswers++;
+            document.getElementById('wrong-count-hud').innerText = gameState.wrongAnswers;
+            
+            modifyStats({ energy: -20, hull: -20 }); // Oxygen o2 untouched
+            appendTerminalLog("⚠️ ELECTRIC ARC FAULT: Base systems energy drained by firewall kickback.", false);
+
+            closeCircuitMiniGame();
+            changeStoryNode(sentenceBypassState.nextNodeSuccess); 
+        }
+
+        function closeCircuitMiniGame() {
+            clearInterval(sentenceBypassState.interval);
+            document.getElementById('minigame-container').classList.add('hidden');
+            document.getElementById('minigame-container').classList.remove('flex');
+            document.getElementById('choices-container').classList.remove('hidden');
+        }
+
+        function startPrologueTypewriter() {
+            document.getElementById('intro-screen').classList.add('hidden');
+            document.getElementById('prologue-screen').classList.remove('hidden');
+            
+            const typingBox = document.getElementById('prologue-typing-box');
+            typingBox.innerHTML = '';
+            
+            prologueIndex = 0;
+            prologueCharIndex = 0;
+            document.getElementById('prologue-next-btn').classList.add('hidden');
+            
+            typeNextPrologueLine();
+        }
+
+        function typeNextPrologueLine() {
+            if (prologueIndex >= PROLOGUE_TEXT_EN.length) {
+                // Show transition button when finished
+                document.getElementById('prologue-next-btn').classList.remove('hidden');
+                return;
+            }
+
+            const typingBox = document.getElementById('prologue-typing-box');
+            
+            // Generate English narrative row
+            const pEn = document.createElement('p');
+            pEn.className = "text-slate-100 font-bold mb-1 font-orbitron text-sm md:text-base animate-fade-in";
+            
+            // Generate Korean translation helper row (always visible below)
+            const pKo = document.createElement('p');
+            pKo.className = "text-purple-400/90 text-xs md:text-sm font-sans mb-5 font-semibold";
+            pKo.innerText = "🇰🇷 " + PROLOGUE_TEXT_KO[prologueIndex];
+
+            typingBox.appendChild(pEn);
+            typingBox.appendChild(pKo);
+            typingBox.scrollTop = typingBox.scrollHeight;
+
+            const textEn = PROLOGUE_TEXT_EN[prologueIndex];
+            prologueCharIndex = 0;
+
+            prologueLineInterval = setInterval(() => {
+                if (prologueCharIndex < textEn.length) {
+                    pEn.textContent += textEn.charAt(prologueCharIndex);
+                    prologueCharIndex++;
+                    
+                    if (prologueCharIndex % 3 === 0) {
+                        AudioCtrl.playClick();
+                    }
+                } else {
+                    clearInterval(prologueLineInterval);
+                    prologueLineInterval = null;
+                    prologueIndex++;
+                    
+                    setTimeout(() => {
+                        typeNextPrologueLine();
+                    }, 500);
+                }
+            }, 10);
+        }
+
+        function skipPrologueToVideo() {
+            if (prologueLineInterval) {
+                clearInterval(prologueLineInterval);
+                prologueLineInterval = null;
+            }
+            document.getElementById('prologue-screen').classList.add('hidden');
+            startMissionBriefingVideo();
+        }
+
+        function startMissionBriefingVideo() {
+            // Stop any background prologue music playing so video audio takes center stage
+            AudioCtrl.stopBGM();
+            
+            document.getElementById('video-screen').classList.remove('hidden');
+            
+            const videoEl = document.getElementById('briefing-video');
+            const iframeEl = document.getElementById('briefing-iframe');
+            
+            videoEl.classList.remove('hidden');
+            iframeEl.classList.add('hidden');
+            
+            // CRITICAL Autoplay Fix: Explicitly force muted autoplay first (guarantees browser launch)
+            videoEl.muted = true;
+            videoEl.load();
+            
+            const playPromise = videoEl.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    console.log("Muted video autoplay initiated successfully.");
+                    // Immediately try to restore the audio, which succeeds since user clicked start buttons earlier
+                    videoEl.muted = false;
+                }).catch(err => {
+                    console.log("Autoplay unmuted blocked by policy; continuing with muted streaming playback.", err);
+                });
+            }
+
+            // Fallback timer: If direct download URL fails to load metadata within 4.5 seconds, switch to drive preview player iframe
+            videoFallbackTimer = setTimeout(() => {
+                if (videoEl.readyState < 3) {
+                    console.log(" Sluggish direct Google Drive link response. Switching to standard preview fallback player.");
+                    switchToIframeFallback();
+                }
+            }, 4500);
+
+            // Set ended listener to auto-transition on successful direct playback
+            videoEl.onended = function() {
+                completeVideoAndTransitionToGame();
+            };
+        }
+
+        function switchToIframeFallback() {
+            if (videoFallbackTimer) clearTimeout(videoFallbackTimer);
+            
+            const videoEl = document.getElementById('briefing-video');
+            const iframeEl = document.getElementById('briefing-iframe');
+            
+            videoEl.pause();
+            videoEl.classList.add('hidden');
+            iframeEl.classList.remove('hidden');
+            
+            showToast("🛰️ Connecting via secondary satellite relay... Iframe backup active.", "info");
+            
+            // Since we can't listen to 'ended' events on external drive iframes due to cross-origin restriction,
+            // we create a comfortable auto-transition safety timeout (45s) so it doesn't loop forever if unattended.
+            videoFallbackTimer = setTimeout(() => {
+                completeVideoAndTransitionToGame();
+            }, 45000);
+        }
+
+        function completeVideoAndTransitionToGame() {
+            if (videoFallbackTimer) clearTimeout(videoFallbackTimer);
+            
+            const videoEl = document.getElementById('briefing-video');
+            videoEl.pause();
+            
+            document.getElementById('video-screen').classList.add('hidden');
+            document.getElementById('game-container').classList.remove('hidden');
+            
+            // Initialize game with reset (false parameter prevents going back to introductory landing screen)
+            resetGame(false);
+        }
+
+        // Robust reset utility to support returning cleanly to intro view or starting active session immediately
+        function resetGame(goToIntro = true) {
+            clearInterval(gameState.jitoInterval);
+            clearInterval(gameState.jitoSpawnCheckInterval);
+            if (typingInterval) {
+                clearInterval(typingInterval);
+                typingInterval = null;
+            }
+            if (videoFallbackTimer) {
+                clearTimeout(videoFallbackTimer);
+                videoFallbackTimer = null;
+            }
+            
+            // Wipe and restore back to exact original state parameters
+            gameState = JSON.parse(JSON.stringify(INITIAL_STATE));
+            
+            // Sync current toggle preference label
+            gameState.translateMode = document.getElementById('translate-toggle').innerText.includes('ONLY');
+            
+            document.getElementById('wrong-count-hud').innerText = gameState.wrongAnswers;
+            updateStatsBar();
+            AudioCtrl.stopJitoAlarm();
+            
+            document.getElementById('choices-container').classList.remove('hidden');
+            document.getElementById('minigame-container').classList.add('hidden');
+            
+            // Always stop all playing audios cleanly
+            AudioCtrl.stopBGM();
+
+            if (goToIntro) {
+                // Return to original launch screen
+                document.getElementById('game-container').classList.add('hidden');
+                const introScreen = document.getElementById('intro-screen');
+                introScreen.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
+                introScreen.style.opacity = '1';
+                introScreen.style.pointerEvents = 'auto';
+            } else {
+                // Start a fresh simulation session
+                AudioCtrl.playBGM('cyberpunk');
+                changeStoryNode('intro_command');
+                startJitoRandomSpawnChecks();
+            }
+        }
+
+        window.onload = function() {
+            RadarInstance = new MarsSurfaceScanner('radar-canvas');
+            RadarInstance.updateAndDraw();
+
+            const canvasEl = document.getElementById('radar-canvas');
+
+            // Shared interaction trigger logic for click/touch targeting of active hazards (e.g. Alien Jito)
+            const handleRadarInteraction = (clientX, clientY) => {
+                if (!gameState.jitoActive) return;
+
+                const rect = canvasEl.getBoundingClientRect();
+                const clickX = ((clientX - rect.left) / rect.width) * canvasEl.width;
+                const clickY = ((clientY - rect.top) / rect.height) * canvasEl.height;
+
+                const dx = clickX - gameState.jitoX;
+                const dy = clickY - gameState.jitoY;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                const elapsed = 20 - gameState.jitoTimer;
+                const sizeScale = 35 + (elapsed / 20) * 165;
+                const collisionRadius = Math.max(28, sizeScale * 0.7);
+
+                if (dist <= collisionRadius) { 
+                    captureJitoSuccess();
+                } else {
+                    AudioCtrl.playClick();
+                }
+            };
+
+            canvasEl.addEventListener('click', (e) => {
+                handleRadarInteraction(e.clientX, e.clientY);
+            });
+
+            canvasEl.addEventListener('touchstart', (e) => {
+                e.preventDefault(); 
+                const touch = e.touches[0];
+                handleRadarInteraction(touch.clientX, touch.clientY);
+            }, { passive: false });
+
+            // Core event listener bindings for minigame reset & skip actions
+            document.getElementById('bypass-reset-btn').addEventListener('click', () => {
+                AudioCtrl.playClick();
+                const currentSentence = sentenceBypassState.correctOrder.join(' ').replace(/\s+([.\?])/g, '$1');
+                const data = scrambleSentence(currentSentence);
+                sentenceBypassState.userOrder = [];
+                renderScrambleBoard(data.scrambled);
+                document.getElementById('word-answer-slots').innerHTML = '';
+            });
+
+            document.getElementById('bypass-exit-btn').addEventListener('click', () => {
+                failSentenceBypass("User Skipped Override Command");
+            });
+
+            // Prologue Skip button event listener mapping
+            document.getElementById('prologue-skip-btn').addEventListener('click', () => {
+                AudioCtrl.playPing();
+                skipPrologueToVideo();
+            });
+
+            // Prologue Enter Terminal button listener mapping
+            document.getElementById('prologue-next-btn').addEventListener('click', () => {
+                AudioCtrl.playPing();
+                skipPrologueToVideo();
+            });
+
+            // Briefing Video Skip button listener mapping
+            document.getElementById('video-skip-btn').addEventListener('click', () => {
+                AudioCtrl.playPing();
+                completeVideoAndTransitionToGame();
+            });
+
+            // Launch Terminal sequence on click -> Triggers cinematic typewriter prologue sequence
+            document.getElementById('start-btn').addEventListener('click', async () => {
+                await AudioCtrl.init(); 
+                AudioCtrl.playPing();
+                startPrologueTypewriter();
+            });
+
+            // Audio Mute toggle
+            document.getElementById('mute-btn').addEventListener('click', () => {
+                const isMuted = AudioCtrl.toggleMute();
+                const btn = document.getElementById('mute-btn');
+                if (isMuted) {
+                    btn.innerText = "🔇 MUSIC: OFF";
+                    btn.className = "text-slate-500 hover:text-slate-400 text-xs px-4 py-2 bg-slate-950/40 hover:bg-slate-900/40 rounded-xl border border-slate-800 transition-all font-bold cursor-pointer";
+                } else {
+                    btn.innerText = "🔊 MUSIC: ON";
+                    btn.className = "text-orange-400 hover:text-orange-300 text-xs px-4 py-2 bg-orange-950/40 hover:bg-orange-900/40 rounded-xl border border-orange-500/50 transition-all font-bold cursor-pointer";
+                }
+            });
+
+            // Translate Toggle Handler: Always starts in English only on launch.
+            document.getElementById('translate-toggle').addEventListener('click', () => {
+                gameState.translateMode = !gameState.translateMode;
+                const btn = document.getElementById('translate-toggle');
+                if (gameState.translateMode) {
+                    btn.innerText = "🇺🇸 ENGLISH ONLY";
+                    btn.className = "bg-purple-950/40 hover:bg-purple-900/60 text-purple-300 text-xs px-4 py-2 rounded-xl border border-purple-500/50 transition-all font-bold cursor-pointer flex items-center gap-1";
+                } else {
+                    btn.innerText = "🇰🇷 KOREAN TRANSLATION";
+                    btn.className = "bg-slate-900 hover:bg-slate-800 text-slate-400 text-xs px-4 py-2 rounded-xl border border-slate-700 transition-all font-bold cursor-pointer flex items-center gap-1";
+                }
+                AudioCtrl.playClick();
+                
+                // Triggers instant UI text refreshes without laggy typing restarts
+                refreshCurrentNodeDisplay();
+            });
+        };
+    </script>
+</body>
+</html>
